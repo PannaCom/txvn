@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".UI.CheckGoodsActivity">
+    <item
+        android:id="@+id/action_filter"
+        android:orderInCategory="200"
+        android:icon="@drawable/clear_filter"
+        android:title="Search"
+        app:showAsAction="always">
+    </item>
+</menu>
