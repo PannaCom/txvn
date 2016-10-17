@@ -74,8 +74,10 @@ public class ActiveCarAdapter extends RecyclerView.Adapter<ActiveCarAdapter.Vehi
                 mContext.startActivity(intent);
             }
         });
-
-        holder.txtCarMade.setText(vehicles.get(position).getCarMade());
+        if (!vehicles.get(position).getPrice().equals("Thỏa thuận"))
+            holder.txtCarPrice.setText(vehicles.get(position).getPrice()+" đ/km");
+        else
+            holder.txtCarPrice.setText(vehicles.get(position).getPrice());
         holder.txtCarType.setText(vehicles.get(position).getCarType());
         holder.txtCarSize.setText(vehicles.get(position).getCarSize()+ " chỗ");
         holder.txtPhone.setText(vehicles.get(position).getPhone());
@@ -98,7 +100,7 @@ public class ActiveCarAdapter extends RecyclerView.Adapter<ActiveCarAdapter.Vehi
     public static class VehicleViewHolder extends RecyclerView.ViewHolder {
         CardView  cardview;
         TextView  txtName;
-        TextView  txtCarMade;
+        TextView  txtCarPrice;
         TextView  txtCarType;
         ImageView btnCall;
         TextView  txtCarSize;
@@ -110,7 +112,7 @@ public class ActiveCarAdapter extends RecyclerView.Adapter<ActiveCarAdapter.Vehi
             super(itemView);
             cardview        = (CardView)        itemView.findViewById(R.id.card_view);
             txtName         = (TextView)        itemView.findViewById(R.id.txt_name);
-            txtCarMade      = (TextView)        itemView.findViewById(R.id.txt_car_made);
+            txtCarPrice     = (TextView)        itemView.findViewById(R.id.txt_price);
             txtCarType      = (TextView)        itemView.findViewById(R.id.txt_car_type);
             btnCall         = (ImageView)       itemView.findViewById(R.id.img_call);
             txtCarSize      = (TextView)        itemView.findViewById(R.id.txt_car_size);

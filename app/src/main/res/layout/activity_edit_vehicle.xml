@@ -15,6 +15,13 @@
             android:src="@mipmap/car"
             android:layout_gravity="center"
             android:id="@+id/imageView15" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/back"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/img_back" />
     </FrameLayout>
 
     <ScrollView
@@ -127,7 +134,7 @@
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@mipmap/btn_register"
+                        android:background="@mipmap/btn_register_no_edit"
                         android:paddingBottom="5dp"
                         android:paddingTop="5dp"
                         android:paddingLeft="5dp"
@@ -152,6 +159,7 @@
                                 android:inputType="phone"
                                 android:ems="10"
                                 android:textSize="16sp"
+                                android:focusable="false"
                                 android:textColor="@color/colorPrimaryDark"
                                 android:id="@+id/txt_telephone" />
 

@@ -60,6 +60,7 @@ public class NewVehicleActivity extends AppCompatActivity {
     private Button btnRegister;
     private int carPossition = 0;
     private SharePreference preference;
+    private String price;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -328,7 +329,7 @@ public class NewVehicleActivity extends AppCompatActivity {
             carObject.put("socho", txtSize.getText().toString());
             carObject.put("loaixe", txtType.getText().toString());
             carObject.put("namxe", txtProduceYear.getText().toString());
-            carObject.put("gia", txtPrice.getText().toString());
+            carObject.put("gia", price);
 
         } catch (JSONException e) {
             // TODO Auto-generated catch block
@@ -505,10 +506,24 @@ public class NewVehicleActivity extends AppCompatActivity {
     private View.OnClickListener click_to_price_listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            requestFocus(txtPrice);
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setTitle("Chọn giá xe")
+                    .setSingleChoiceItems(R.array.price_array,-1, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            price = mContext.getResources().getStringArray(R.array.price_array)[which];
+                            if (which == 0)
+                                txtPrice.setText(price);
+                            else
+                                txtPrice.setText(price+ " đ/km");
+
+                            dialog.dismiss();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
         }
     };
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

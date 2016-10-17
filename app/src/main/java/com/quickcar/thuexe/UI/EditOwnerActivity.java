@@ -45,7 +45,7 @@ public class EditOwnerActivity extends AppCompatActivity {
     private AutoCompleteTextView txtCarName;
     private ArrayList<String> aTypes, placeFrom, placeTo, aTimes, aReceive, aVehicleType, aName;
     private FrameLayout layoutBienSo, layoutCategory, layoutName, layoutPhone, layoutPrice,layoutCarName,layoutType, layoutSize, layoutProduceYear;
-    private ImageView imgCategory, imgSize, imgProduceYear, imgVehicleType;
+    private ImageView imgBack;
     private EditText txtName, txtTelephone, txtBienSo,txtPrice;
     private TextView txtType, txtCategory, txtSize, txtProduceYear;
     private TextView errBienSo, errCategory, errName, errPhone, errPrice,errCarName,errType, errSize, errProduceYear;;
@@ -55,6 +55,7 @@ public class EditOwnerActivity extends AppCompatActivity {
     private Button btnRegister;
     private int carPossition = 0;
     private SharePreference preference;
+    private String price;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,10 +110,7 @@ public class EditOwnerActivity extends AppCompatActivity {
 
 
 
-        imgCategory         = (ImageView)               findViewById(R.id.btn_get_category);
-        imgSize             = (ImageView)               findViewById(R.id.btn_get_size);
-        imgVehicleType      = (ImageView)               findViewById(R.id.btn_get_vehicle_type);
-        imgProduceYear      = (ImageView)               findViewById(R.id.btn_get_produce_year);
+        imgBack             = (ImageView)               findViewById(R.id.img_back);
 
         txtName             = (EditText)                findViewById(R.id.txt_name);
         txtTelephone        = (EditText)                findViewById(R.id.txt_telephone);
@@ -148,6 +146,7 @@ public class EditOwnerActivity extends AppCompatActivity {
 
         layoutName.setOnClickListener(click_to_name_listener);
         layoutPhone.setOnClickListener(click_to_phone_listener);
+        txtTelephone.setOnClickListener(click_to_phone_listener);
         layoutBienSo.setOnClickListener(click_to_bien_so_listener);
         layoutCategory.setOnClickListener(click_to_category_listener);
         layoutCarName.setOnClickListener(click_to_car_name_listener);
@@ -164,6 +163,12 @@ public class EditOwnerActivity extends AppCompatActivity {
                 if (!checkParamsNull()) {
                     editVehicle();
                 }
+            }
+        });
+        imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
@@ -248,7 +253,7 @@ public class EditOwnerActivity extends AppCompatActivity {
         params.put("car_size", size);
         params.put("car_type", txtType.getText().toString());
         params.put("car_year", txtProduceYear.getText().toString());
-        params.put("car_price", txtPrice.getText().toString());
+        params.put("car_price", price);
 
         Log.i("params deleteDelivery", params.toString());
         dialog = new ProgressDialog(this);
@@ -462,7 +467,7 @@ public class EditOwnerActivity extends AppCompatActivity {
     private View.OnClickListener click_to_phone_listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            requestFocus(txtTelephone);
+            Toast.makeText(mContext,"Bạn không thể thay đổi số điện thoại",Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -482,7 +487,21 @@ public class EditOwnerActivity extends AppCompatActivity {
     private View.OnClickListener click_to_price_listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            requestFocus(txtPrice);
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setTitle("Chọn giá xe")
+                    .setSingleChoiceItems(R.array.price_array,-1, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            price = mContext.getResources().getStringArray(R.array.price_array)[which];
+                            if (which == 0)
+                                txtPrice.setText(price);
+                            else
+                                txtPrice.setText(price+ " đ/km");
+                            dialog.dismiss();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
         }
     };
 

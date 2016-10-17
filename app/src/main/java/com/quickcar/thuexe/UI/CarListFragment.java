@@ -1,12 +1,15 @@
 package com.quickcar.thuexe.UI;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -48,13 +52,13 @@ public class CarListFragment extends Fragment {
     private RecyclerView vehicleView;
     private ArrayList<CarInforObject> vehicles;
     private Context mContext;
-    private ImageView imgLoading;
     private boolean isFilter = false;
     private TextView txtNoResult;
     private MenuItem itemFilter;
     private double longitude, latitude;
     private ActiveCarAdapter adapter;
-
+    private ProgressDialog dialog;
+    private SwipeRefreshLayout swipeToRefresh;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -85,16 +89,14 @@ public class CarListFragment extends Fragment {
     private void initComponents() {
         vehicleView                 =   (RecyclerView)          getView().findViewById(R.id.vehicle_view);
         txtNoResult                 =   (TextView)              getView().findViewById(R.id.txt_no_result);
-        imgLoading                  =   (ImageView)             getView().findViewById(R.id.img_loading);
-
-
-
-
-        AnimationDrawable frameAnimation = (AnimationDrawable) imgLoading.getBackground();
-        frameAnimation.start();
-
-
-
+        swipeToRefresh              =   (SwipeRefreshLayout)     getView().findViewById(R.id.swipe_view);
+        swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getCurrentLocation();
+                requestToGetListVehicle();
+            }
+        });
         // set cardview
         vehicleView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(mContext);
@@ -109,7 +111,6 @@ public class CarListFragment extends Fragment {
 
     private void showOffline() {
         txtNoResult.setVisibility(View.VISIBLE);
-        imgLoading.setVisibility(View.GONE);
         txtNoResult.setText("Không có kết nối mạng");
     }
     private void getCurrentLocation() {
@@ -135,10 +136,7 @@ public class CarListFragment extends Fragment {
         else
             params.put("car_made", Defines.FilterInfor.getCarMade());
 
-        if (Defines.FilterInfor.getCarModel().equals("Tất cả"))
-            params.put("car_model", "");
-        else
-            params.put("car_model", Defines.FilterInfor.getCarModel());
+        params.put("car_model", Defines.FilterInfor.getCarModel());
 
         if (Defines.FilterInfor.getCarSize().equals("Tất cả"))
             params.put("car_size", "");
@@ -149,7 +147,13 @@ public class CarListFragment extends Fragment {
         params.put("lat", latitude);
         Log.i("params deleteDelivery", params.toString());
         vehicles = new ArrayList<>();
-        //swipeToRefresh.setRefreshing(true);
+        dialog = new ProgressDialog(getContext());
+        if (!swipeToRefresh.isRefreshing()) {
+            dialog.setMessage("Đang tải dữ liệu");
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(false);
+            dialog.show();
+        }
         BaseService.getHttpClient().post(Defines.URL_LIST_ONL_VEHICLE, params, new AsyncHttpResponseHandler() {
 
             @Override
@@ -176,9 +180,10 @@ public class CarListFragment extends Fragment {
                         txtNoResult.setText("Không có xe nào cho tuyến này");
                         //swipeToRefresh.setRefreshing(false);
                     }
-                    imgLoading.setVisibility(View.GONE);
+                    dialog.dismiss();
                     //prepareDataSliding();
-                    //swipeToRefresh.setRefreshing(false);
+                    if (swipeToRefresh.isRefreshing())
+                        swipeToRefresh.setRefreshing(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -187,15 +192,15 @@ public class CarListFragment extends Fragment {
             @Override
             public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
                 // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-                //Toast.makeText(MainActivity.this, getResources().getString(R.string.check_network), Toast.LENGTH_SHORT).show();
-                imgLoading.setVisibility(View.GONE);
+                Toast.makeText(getContext(), getResources().getString(R.string.check_network), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
 
             @Override
             public void onRetry(int retryNo) {
                 // called when request is retried
-                //Toast.makeText(MainActivity.this, getResources().getString(R.string.check_network), Toast.LENGTH_SHORT).show();
-                imgLoading.setVisibility(View.GONE);
+                Toast.makeText(getContext(), getResources().getString(R.string.check_network), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
         });
     }
@@ -208,15 +213,15 @@ public class CarListFragment extends Fragment {
     private void parseJsonResult(JSONObject jsonobject) {
         try {
             String name         = jsonobject.getString("name");
-            String phone           = jsonobject.getString("phone");
-            String carModel         = jsonobject.getString("car_model");
+            String phone        = jsonobject.getString("phone");
+            String carModel     = jsonobject.getString("car_model");
 
-            String carSize         = jsonobject.getString("car_size");
-            String carType    = jsonobject.getString("car_type");
-            String carMade     = jsonobject.getString("car_made");
+            String carSize      = jsonobject.getString("car_size");
+            String carType      = jsonobject.getString("car_type");
+            String carMade      = jsonobject.getString("car_made");
             double distance     = jsonobject.getDouble("D");
-
-            CarInforObject busInfor = new CarInforObject(name,phone,carModel,carMade,carType,carSize,distance);
+            String price        = jsonobject.getString("car_price");
+            CarInforObject busInfor = new CarInforObject(name,phone,carModel,carMade,carType,carSize,distance,price);
             vehicles.add(busInfor);
         } catch (JSONException e) {
             e.printStackTrace();

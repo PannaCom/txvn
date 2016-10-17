@@ -1,11 +1,13 @@
 package com.quickcar.thuexe.UI;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,6 +42,7 @@ public class MapCarActiveFragment extends Fragment implements OnMapReadyCallback
     private GoogleMap mMap;
     private MapView mMapView;
     private double longitude, latitude;
+    private ProgressDialog dialog;
     private ArrayList<Marker> markerList = new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -101,7 +104,11 @@ public class MapCarActiveFragment extends Fragment implements OnMapReadyCallback
         params.put("lat", latitude);
         Log.i("params deleteDelivery", params.toString());
         //swipeToRefresh.setRefreshing(true);
-
+        dialog = new ProgressDialog(getContext());
+        dialog.setMessage("Đang tải dữ liệu");
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        dialog.show();
         // show current position
         LatLng sydney = new LatLng(latitude,longitude);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Vị trí của bạn"));
@@ -119,6 +126,7 @@ public class MapCarActiveFragment extends Fragment implements OnMapReadyCallback
             public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
                 // called when response HTTP status is "200 OK"
                 Log.i("JSON", new String(responseBody));
+                dialog.dismiss();
                 try {
                     JSONArray data = new JSONArray(new String(responseBody));
                     for (int i = 0; i < data.length(); i++) {
@@ -134,13 +142,16 @@ public class MapCarActiveFragment extends Fragment implements OnMapReadyCallback
             public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
                 // called when response HTTP status is "4XX" (eg. 401, 403, 404)
                 //Toast.makeText(MainActivity.this, getResources().getString(R.string.check_network), Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(getContext(), getResources().getString(R.string.check_network), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
 
             @Override
             public void onRetry(int retryNo) {
                 // called when request is retried
                 //Toast.makeText(MainActivity.this, getResources().getString(R.string.check_network), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getResources().getString(R.string.check_network), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
         });
     }

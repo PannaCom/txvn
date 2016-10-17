@@ -5,54 +5,6 @@
     <string name="about_me"><![CDATA[<u>Giới thiệu</u>]]></string>
     <string name="register">Đăng ký</string>
     <string name="register_notice"><u>Đăng ký tài khoản mới</u></string>
-    <string name="contact_me"><![CDATA[<u>Liên hệ</u>]]></string>
-    <string-array name="province_array">
-        <item>Hà Nội</item>
-        <item>Sài Gòn</item>
-        <item>Đà Nẵng</item>
-        <item>An Giang</item>
-        <item>Bắc Kạn</item>
-        <item>Bến Tre</item>
-        <item>Bình Phước</item>
-        <item>Bình Thuận</item>
-        <item>Cần Thơ</item>
-        <item>Cao Bằng</item>
-        <item>Đắk Lắk</item>
-        <item>Điện Biên</item>
-        <item>Đồng Tháp</item>
-        <item>Gia Lai</item>
-        <item>Hà Giang</item>
-        <item>Hà Tĩnh</item>
-        <item>Hải Dương</item>
-        <item>Hải Phòng</item>
-        <item>Hòa Bình</item>
-        <item>Huế</item>
-        <item>Hưng Yên</item>
-        <item>Lai Châu</item>
-        <item>Lâm Đồng</item>
-        <item>Lạng Sơn</item>
-        <item>Lào Cai</item>
-        <item>Nam Định</item>
-        <item>Nghệ An</item>
-        <item>Ninh Bình</item>
-        <item>Ninh Thuận</item>
-        <item>Phú Thọ</item>
-        <item>Quảng Bình</item>
-        <item>Quảng Ngãi</item>
-        <item>Quảng Ninh</item>
-        <item>Quảng Trị</item>
-        <item>Sơn La</item>
-        <item>Thái Bình</item>
-        <item>Thái Nguyên</item>
-        <item>Thanh Hóa</item>
-        <item>Tiền Giang</item>
-        <item>Trà Vinh</item>
-        <item>Tuyên Quang</item>
-        <item>Vĩnh Long</item>
-        <item>Vũng Tàu</item>
-        <item>Yên Bái</item>
-
-    </string-array>
     <string-array name="vehicle_array">
         <item>Xe tư nhân trong bến</item>
         <item>Xe uy tín có đặt vé</item>
@@ -69,6 +21,28 @@
         <item>40 chỗ</item>
         <item>50 chỗ</item>
     </string-array>
+    <string-array name="price_array">
+        <item>Thỏa thuận</item>
+        <item>6000</item>
+        <item>6500</item>
+        <item>7000</item>
+        <item>7500</item>
+        <item>8000</item>
+        <item>8500</item>
+        <item>9000</item>
+        <item>9500</item>
+        <item>10000</item>
+        <item>10500</item>
+        <item>11000</item>
+        <item>11500</item>
+        <item>12000</item>
+        <item>12500</item>
+        <item>13000</item>
+        <item>13500</item>
+        <item>14000</item>
+        <item>14500</item>
+        <item>15000</item>
+    </string-array>
     <string-array name="type_array">
         <item>Xe tự do</item>
         <item>Xe taxi</item>
@@ -78,43 +52,6 @@
         <item>Xe tải chở hàng</item>
         <item>Xe container</item>
     </string-array>
+    <string name="check_network">Không lấy được dữ liệu. Vui lòng kiểm tra mạng</string>
 
-
-    <string name="term_of_use">
-    <![CDATA[
-    <html>
-     <head></head>
-     <body style="text-align:justify;color:gray;background-color:black;">
-     Xe63.vn là hệ thống website đặt vé và cung cấp thông tin hoạt động của các nhà xe trong lĩnh vực vận tải hành khách tại tất cả 63 tỉnh thành trên cả nước. Hệ thống website với những bộ lọc tìm kiếm thông minh sẽ giúp các bạn tìm kiếm và đặt xe phục vụ cho nhu cầu đi lại của mình một cách nhanh chóng, tiện lợi và hiệu quả.
-            <br><b>Xe63 mang đến những lợi ích cao nhất cho các bạn, những hành khách đi xe :</b>
-            <br>- Bạn không phải ra bến xe, phòng bán vé xe để tìm kiếm thông tin lịch trình hoạt động và thông tin liên hệ của các xe mình muốn đi. Chỉ cần sử dụng bộ lọc tìm kiếm của http://xe63.vn/, bạn hoàn toàn có thể tìm được nhà xe đáp ứng đúng nhu cầu và liên hệ đặt xe trực tiếp với họ. Tiết kiệm thời gian, chi phí tối đa cho bạn.
-            <br>- Thông qua bộ lọc tìm kiếm, bạn có thể nhanh chóng chọn nhà xe theo các tiêu chí bạn mong muốn như : hãng xe, loại xe, loại hình, tiện ích, nơi xuất phát, nơi đến một cách dễ dàng nhất.
-            <br>- Khi truy cập website http://xe63.vn/ bằng điện thoại thông minh, bạn chỉ cần tìm xe và bấm vào số điện thoại nhà xe là có thể gọi ngay cho họ. Bạn không cần phải lưu vào danh bạ từng số nhà xe của từng tuyến mà bạn muốn đi xe như trước nữa.
-            <br>- Thông tin của các nhà xe mới, các tuyến đường mới luôn được chúng tôi cập nhật hàng ngày nhanh chóng, chính xác.
-            <br><b>Xe63.vn mang đến những lợi ích cao nhất cho nhà cung cấp, những nhà xe cung cấp dịch vụ :</b>
-            <br>- Nhà xe rất dễ dàng để đưa thông tin lịch trình và liên hệ của mình lên xe63.vn . Giúp cho hàng nghìn khách hàng tiềm năng tiếp cận và liên hệ với mình, góp phần tích cực gia tăng lượng khách hàng và doanh số.
-            <br>- Nhà xe có thể tương tác hai chiều với khách hàng của mình, nắm bắt những nhu cầu, góp ý của họ để cải thiện quy trình và chất lượng dịch vụ. Đem lại sự tiện lợi tối đa cho hành khách.
-            <br>- Nhà xe không mất chi phí gì khi đưa thông tin lên xe63.vn
-            <br>Quý nhà xe có nhu cầu đưa thông tin liên hệ / Quý khách hàng có nhu cầu góp ý và đưa thông tin nhà xe mình biết lên hệ thống xe63.vn . Xin vui lòng liên hệ :
-            <br><b>Điện thoại</b> : 0966 346 393 / 0914 686 220
-            <br><b>Email</b> : lienhe@xe63.vn>
-     </body>
-    </html>
-    ]]>
-    </string>
-
-     <string name="contact">
-    <![CDATA[
-    <html>
-     <head></head>
-     <body style="text-align:justify;color:gray;background-color:black;">
-        Chúng tôi sẵn sàng trợ giúp cho bạn thông qua trung tâm dịch vụ từ 08:00 đến 22:00 hàng ngày bằng nhiều hình thức như : điện thoại, email, facebook, zalo…
-        <br>Chúng tôi mong muốn cung cấp cho các bạn những dịch vụ tốt nhất cho hành trình đi lại bằng xe khách của các bạn. Bất cứ khi nào bạn cần có sự trợ giúp hoặc thắc mắc, góp ý, hợp tác với http://www.xe63.vn. Chúng tôi rất vui mừng được hỗ trợ, hợp tác với các bạn
-        <br>Quý nhà xe có nhu cầu đưa thông tin liên hệ / Quý khách hàng có nhu cầu góp ý và đưa thông tin nhà xe mình biết lên hệ thống <i>http://www.xe63.vn</i>. Xin vui lòng liên hệ :
-        <br><b>Điện thoại </b>:  0966 346 393 /  0914 686 220
-        <br><b>Email</b>        :  lienhe@xe63.vn
-     </body>
-    </html>
-    ]]>
-    </string>
 </resources>

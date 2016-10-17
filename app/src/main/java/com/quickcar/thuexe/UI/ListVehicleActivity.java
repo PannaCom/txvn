@@ -2,6 +2,7 @@
 package com.quickcar.thuexe.UI;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.support.design.widget.AppBarLayout;
@@ -14,11 +15,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -57,7 +61,7 @@ public class ListVehicleActivity extends AppCompatActivity {
     private RelativeLayout mDrawer;
     private OnDataPass dataPasser;
     private OnDataMap dataMap;
-    private ImageView imgBack;
+    private ImageView imgBack, imgMenu;
     private Spinner categorySpinner , carSizeSpinner, carTypeSpinner;
     private AutoCompleteTextView txtcarName;
     private ArrayList<String> arrCarModel, arrCarMade, arrCarSize, arrCarType;
@@ -93,7 +97,27 @@ public class ListVehicleActivity extends AppCompatActivity {
         setupTabIcons();
 
         prepareDataSliding();
-        ImageView imgBack = (ImageView) findViewById(R.id.img_back);
+        imgBack = (ImageView) findViewById(R.id.img_back);
+        imgMenu = (ImageView) findViewById(R.id.img_menu);
+        imgMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(mContext, v);
+                MenuInflater inflater = popup.getMenuInflater();
+                inflater.inflate(R.menu.intro_menu, popup.getMenu());
+                popup.show();
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getItemId() == R.id.switch_user){
+                            showDialogSwitchUser();
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+            }
+        });
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,20 +145,20 @@ public class ListVehicleActivity extends AppCompatActivity {
     }
 
     private void getDataSearch() {
-        try {
-            JSONObject carObject = new JSONObject(preference.getKeySearch());
+        //try {
+            /*JSONObject carObject = new JSONObject(preference.getKeySearch());
             carMade       = carObject.getString("hangxe");
             carName       = carObject.getString("tenxe");
             carSize       = carObject.getString("socho");
-            carType       = carObject.getString("loaixe");
+            carType       = carObject.getString("loaixe");*/
             Defines.FilterInfor = new CarInforObject();
-            Defines.FilterInfor.setCarSize(carSize);
-            Defines.FilterInfor.setCarMade(carMade);
-            Defines.FilterInfor.setCarType(carType);
-            Defines.FilterInfor.setCarModel(carName);
-        } catch (JSONException e) {
+            Defines.FilterInfor.setCarSize("Tất cả");
+            Defines.FilterInfor.setCarMade("Tất cả");
+            Defines.FilterInfor.setCarType("Tất cả");
+            Defines.FilterInfor.setCarModel("");
+       /* } catch (JSONException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     private void setupTabIcons() {
@@ -428,5 +452,27 @@ public class ListVehicleActivity extends AppCompatActivity {
     }
     public interface OnDataMap {
         public void OnDataMap();
+    }
+    private void showDialogSwitchUser() {
+        android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(this)
+                .setTitle("Thông báo")
+                .setMessage("Bạn có muốn chọn lại vai trò của mình?")
+                .setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        preference.saveRole(0);
+                        Intent intent = new Intent(mContext, MainActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        finish();
+                    }
+                })
+                .setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setCancelable(false)
+                .show();
     }
 }

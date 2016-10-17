@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             preference.saveRole(2);
-            Intent intent = new Intent(MainActivity.this, SearchActiveBusScreen.class);
+            Intent intent = new Intent(MainActivity.this, ListVehicleActivity.class);
             startActivity(intent);
             finish();
         }

@@ -66,7 +66,7 @@ public class ListPassengerActivity extends AppCompatActivity implements OnMapRea
         btnWait     = (Button)      findViewById(R.id.btn_wait);
         imgRefresh  = (ImageView)   findViewById(R.id.img_refresh);
         imgMenu     = (ImageView)   findViewById(R.id.img_menu);
-        if (preference.getStatus() == 0) {
+        if (preference.getStatus() == 1) {
             btnBusy.setBackgroundColor(Utilites.getColor(mContext,R.color.red_1));
             btnWait.setBackgroundColor(Utilites.getColor(mContext,R.color.white));
         }else {
@@ -77,18 +77,19 @@ public class ListPassengerActivity extends AppCompatActivity implements OnMapRea
         btnBusy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (preference.getStatus() == 1 ) {
-                    preference.saveStatus(0);
+                if (preference.getStatus() == 0 ) {
+                    preference.saveStatus(1);
                     btnBusy.setBackgroundColor(Utilites.getColor(mContext, R.color.red_1));
                     btnWait.setBackgroundColor(Utilites.getColor(mContext, R.color.white));
+                    sendLocationToServer(preference.getStatus());
                 }
             }
         });
         btnWait.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (preference.getStatus() == 0 ) {
-                    preference.saveStatus(1);
+                if (preference.getStatus() == 1 ) {
+                    preference.saveStatus(0);
                     btnBusy.setBackgroundColor(Utilites.getColor(mContext, R.color.white));
                     btnWait.setBackgroundColor(Utilites.getColor(mContext, R.color.red_1));
                 }
@@ -165,7 +166,7 @@ public class ListPassengerActivity extends AppCompatActivity implements OnMapRea
             }
         }
     }
-    private void sendLocationToServer() {
+    private void sendLocationToServer(int status) {
         GPSTracker gps = new GPSTracker(this);
         if (gps.canGetLocation()){
             if (gps.handlePermissionsAndGetLocation()) {
@@ -179,7 +180,7 @@ public class ListPassengerActivity extends AppCompatActivity implements OnMapRea
         params.put("lat", latitude);
         params.put("car_number", preference.getLicense());
         params.put("phone", preference.getPhone());
-        params.put("status", 0);
+        params.put("status", status);
         Log.i("params deleteDelivery", params.toString());
         BaseService.getHttpClient().post(Defines.URL_LOCATE, params, new AsyncHttpResponseHandler() {
 
@@ -283,9 +284,9 @@ public class ListPassengerActivity extends AppCompatActivity implements OnMapRea
         public void run() {
             try {
                 while (true) {
-                    if (preference.getStatus() == 1) {
+                    if (preference.getStatus() == 0) {
                         Log.e("TAG", "loop");
-                        sendLocationToServer();
+                        sendLocationToServer(preference.getStatus());
                         Thread.sleep(Defines.LOOP_TIME);
                     }
 
@@ -312,5 +313,6 @@ public class ListPassengerActivity extends AppCompatActivity implements OnMapRea
         for (Marker marker : arrMaker)
             marker.remove();
     }
+
 }
 

@@ -103,16 +103,16 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="left"
-                                android:src="@mipmap/tenxe"
-                                android:id="@+id/imageView8" />
+                                android:src="@mipmap/socho"
+                                android:id="@+id/imageView9" />
                         </LinearLayout>
                         <TextView
-                            android:text="car_made"
+                            android:text="car_size"
                             android:layout_width="0dp"
                             android:layout_weight="0.8"
                             android:layout_height="wrap_content"
                             android:textColor="@color/black"
-                            android:id="@+id/txt_car_made" />
+                            android:id="@+id/txt_car_size" />
                     </LinearLayout>
                     <LinearLayout
                         android:orientation="horizontal"
@@ -131,16 +131,16 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="left"
-                                android:src="@mipmap/socho"
-                                android:id="@+id/imageView9" />
+                                android:src="@mipmap/giatien"
+                                android:id="@+id/imageView8" />
                         </LinearLayout>
                         <TextView
-                            android:text="car_size"
+                            android:text="car_price"
                             android:layout_width="0dp"
                             android:layout_weight="0.8"
                             android:layout_height="wrap_content"
                             android:textColor="@color/black"
-                            android:id="@+id/txt_car_size" />
+                            android:id="@+id/txt_price" />
                     </LinearLayout>
                 </LinearLayout>
                 <LinearLayout

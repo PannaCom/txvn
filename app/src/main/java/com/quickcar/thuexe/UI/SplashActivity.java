@@ -38,7 +38,7 @@ public class SplashActivity extends AppCompatActivity {
                     finish();
                 } else {
                     if(preference.getRole() == 2) {
-                        Intent intent = new Intent(SplashActivity.this, SearchActiveBusScreen.class);
+                        Intent intent = new Intent(SplashActivity.this, ListVehicleActivity.class);
                         startActivity(intent);
                         finish();
                     }else if(preference.getRole() == 0){
