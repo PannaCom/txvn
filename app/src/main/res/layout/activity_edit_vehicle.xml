@@ -465,7 +465,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
-                                <EditText
+                                <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:background="@null"
@@ -474,6 +474,7 @@
                                     android:inputType="phone"
                                     android:hint="VD : 8000đ/km"
                                     android:textColor="@color/colorPrimaryDark"
+
                                     android:id="@+id/edt_price" />
 
                             </LinearLayout>

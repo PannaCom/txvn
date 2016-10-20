@@ -33,9 +33,15 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 if (preference.getLogin()) {
-                    Intent intent = new Intent(SplashActivity.this, ListPassengerActivity.class);
-                    startActivity(intent);
-                    finish();
+                    if (preference.getActive()) {
+                        Intent intent = new Intent(SplashActivity.this, ListPassengerActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }else{
+                        Intent intent = new Intent(SplashActivity.this, ActiveAccountActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
                 } else {
                     if(preference.getRole() == 2) {
                         Intent intent = new Intent(SplashActivity.this, ListVehicleActivity.class);

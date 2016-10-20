@@ -15,13 +15,13 @@ public class Defines {
     public static  final String     HOSTNAME                    = "http://thuexevn.com/";
     public static  final String     URL_LIST_ONL_VEHICLE        = HOSTNAME + "Api/getlistonline";
     public static  final String     URL_GET_AROUND              = HOSTNAME + "Api/getaround";
-    public static  final String     URL_BOOK_TICKET             = HOSTNAME + "Appi/ticket";
-    public static  final String     URL_REGISTER                = HOSTNAME + "Appi/register";
-    public static  final String     URL_LOGIN                   = HOSTNAME + "Appi/login";
+    public static  final String     URL_ACTIVE                  = HOSTNAME + "Api/acitive";
+    public static  final String     URL_RESEND                  = HOSTNAME + "Api/resendactive";
+//    public static  final String     URL_LOGIN                   = HOSTNAME + "Appi/login";
     public static  final String     URL_LOCATE                  = HOSTNAME + "Api/locate";
     public static  final String     URL_GET_CAR_NAME            = HOSTNAME + "Api/getCarModelList";
     public static  final String     URL_GET_CAR_MADE            = HOSTNAME + "Api/getCarMadeList";
-    public static  final String     URL_NEW_VEHICLE             = HOSTNAME + "Appi/getauto";
+ //   public static  final String     URL_NEW_VEHICLE             = HOSTNAME + "Appi/getauto";
     public static  final String     URL_REGISTER_VEHICLE        = HOSTNAME + "Api/register";
 
 

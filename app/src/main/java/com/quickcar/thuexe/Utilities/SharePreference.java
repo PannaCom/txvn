@@ -16,7 +16,7 @@ public class SharePreference {
     private String DRIVER_PHONE = "driver phone";
     private String CAR_INFOR = "car info";
     private String KEY_SEARCH = "search";
-    private String PARK_FROM = "park from";
+    private String ACTIVE = "active";
     private String PARK_TO = "park to";
     private String DRIVER_ID = "driver id";
     private String OWNER_NAME = "owner name";
@@ -62,6 +62,12 @@ public class SharePreference {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean(LOGIN, true);
+        editor.apply();
+    }
+    public void clearLogin() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean(LOGIN, false);
         editor.apply();
     }
     public boolean getLogin() {
@@ -133,15 +139,15 @@ public class SharePreference {
         return sp.getString(TYPE,"");
     }
 
-    public void saveParkStart(String park) {
+    public void saveActive(boolean active) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString(PARK_FROM, park);
+        editor.putBoolean(ACTIVE, active);
         editor.apply();
     }
-    public String getParkStart() {
+    public boolean getActive() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
-        return sp.getString(PARK_FROM,"");
+        return sp.getBoolean(ACTIVE, false);
     }
 
     public void saveParkEnd(String park) {

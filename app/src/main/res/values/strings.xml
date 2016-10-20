@@ -1,10 +1,12 @@
 <resources>
     <string name="app_name">ICar</string>
-    <string name="passenger">Hành khách</string>
-    <string name="bus_owner">Nhà xe</string>
-    <string name="about_me"><![CDATA[<u>Giới thiệu</u>]]></string>
-    <string name="register">Đăng ký</string>
-    <string name="register_notice"><u>Đăng ký tài khoản mới</u></string>
+    <string name="passenger" translatable="false">Hành khách</string>
+    <string name="bus_owner" translatable="false">Nhà xe</string>
+    <string name="register" translatable="false">Đăng ký</string>
+    <string name="register_notice" translatable="false"><u>Đăng ký tài khoản mới</u></string>
+    <string name="register_again"><u>Sai số điện thoại? Đăng ký lại.</u></string>
+
+
     <string-array name="vehicle_array">
         <item>Xe tư nhân trong bến</item>
         <item>Xe uy tín có đặt vé</item>
@@ -52,6 +54,10 @@
         <item>Xe tải chở hàng</item>
         <item>Xe container</item>
     </string-array>
-    <string name="check_network">Không lấy được dữ liệu. Vui lòng kiểm tra mạng</string>
+    <string name="check_network" translatable="false">Không lấy được dữ liệu. Vui lòng kiểm tra mạng</string>
+    <string name="active_account">Kích hoạt tài khoản</string>
+    <string name="input_code_active">Nhập mã kích hoạt từ tin nhắn</string>
+    <string name="active">Kích hoạt</string>
+    <string name="resend">Gửi lại</string>
 
 </resources>

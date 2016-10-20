@@ -50,8 +50,8 @@ public class NewVehicleActivity extends AppCompatActivity {
     private ArrayList<String> aTypes, placeFrom, placeTo, aTimes, aReceive, aVehicleType, aName;
     private FrameLayout layoutBienSo, layoutCategory, layoutName, layoutPhone, layoutPrice,layoutCarName,layoutType, layoutSize, layoutProduceYear;
     private ImageView imgCategory, imgSize, imgProduceYear, imgVehicleType;
-    private EditText txtName, txtTelephone, txtBienSo,txtPrice;
-    private TextView txtType, txtCategory, txtSize, txtProduceYear;
+    private EditText txtName, txtTelephone, txtBienSo;
+    private TextView txtType, txtCategory, txtSize, txtProduceYear,txtPrice;
     private TextView errBienSo, errCategory, errName, errPhone, errPrice,errCarName,errType, errSize, errProduceYear;;
     private ProgressDialog dialog;
     private FrameLayout toolbar;
@@ -95,7 +95,7 @@ public class NewVehicleActivity extends AppCompatActivity {
         txtName             = (EditText)                findViewById(R.id.txt_name);
         txtTelephone        = (EditText)                findViewById(R.id.txt_telephone);
         txtBienSo           = (EditText)                findViewById(R.id.txt_bien_so);
-        txtPrice            = (EditText)                findViewById(R.id.edt_price);
+        txtPrice            = (TextView)                findViewById(R.id.edt_price);
 
         txtType             = (TextView)                findViewById(R.id.edt_vehicle_type);
         txtCategory         = (TextView)                findViewById(R.id.txt_category);
@@ -297,7 +297,7 @@ public class NewVehicleActivity extends AppCompatActivity {
                     preference.saveLogin();
                     preference.saveDriverId(result);
                     saveVehicleInfor();
-                    Intent intent = new Intent(mContext, ListPassengerActivity.class);
+                    Intent intent = new Intent(mContext, ActiveAccountActivity.class);
                     startActivity(intent);;
                     finish();
                 }else
