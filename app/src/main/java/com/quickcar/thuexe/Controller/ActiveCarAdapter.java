@@ -74,7 +74,7 @@ public class ActiveCarAdapter extends RecyclerView.Adapter<ActiveCarAdapter.Vehi
                 mContext.startActivity(intent);
             }
         });
-        
+
         holder.txtCarPrice.setText(vehicles.get(position).getPrice());
         holder.txtCarType.setText(vehicles.get(position).getCarType());
         holder.txtCarSize.setText(vehicles.get(position).getCarSize()+ " chỗ");

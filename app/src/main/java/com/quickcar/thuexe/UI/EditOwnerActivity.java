@@ -46,8 +46,8 @@ public class EditOwnerActivity extends AppCompatActivity {
     private ArrayList<String> aTypes, placeFrom, placeTo, aTimes, aReceive, aVehicleType, aName;
     private FrameLayout layoutBienSo, layoutCategory, layoutName, layoutPhone, layoutPrice,layoutCarName,layoutType, layoutSize, layoutProduceYear;
     private ImageView imgBack;
-    private EditText txtName, txtTelephone, txtBienSo,txtPrice;
-    private TextView txtType, txtCategory, txtSize, txtProduceYear;
+    private EditText txtName, txtTelephone, txtBienSo;
+    private TextView txtType, txtCategory, txtSize, txtProduceYear,txtPrice;
     private TextView errBienSo, errCategory, errName, errPhone, errPrice,errCarName,errType, errSize, errProduceYear;;
     private ProgressDialog dialog;
     private FrameLayout toolbar;
@@ -64,6 +64,13 @@ public class EditOwnerActivity extends AppCompatActivity {
         preference = new SharePreference(this);
         initComponents();
         getCarInfor();
+        for (int i=0; i< Defines.CarMade.length;i++)
+            if (Defines.CarMade[i].equals(txtCategory.getText())) {
+                ArrayAdapter<String> adapterProvinceFrom = new ArrayAdapter<>(mContext, android.R.layout.simple_list_item_1, Defines.category[i]);
+                txtCarName.setAdapter(adapterProvinceFrom);
+                txtCarName.setThreshold(1);
+            }
+
     }
 
     private void getCarInfor() {
@@ -115,7 +122,7 @@ public class EditOwnerActivity extends AppCompatActivity {
         txtName             = (EditText)                findViewById(R.id.txt_name);
         txtTelephone        = (EditText)                findViewById(R.id.txt_telephone);
         txtBienSo           = (EditText)                findViewById(R.id.txt_bien_so);
-        txtPrice            = (EditText)                findViewById(R.id.edt_price);
+        txtPrice            = (TextView)                findViewById(R.id.edt_price);
 
         txtType             = (TextView)                findViewById(R.id.edt_vehicle_type);
         txtCategory         = (TextView)                findViewById(R.id.txt_category);
@@ -134,8 +141,6 @@ public class EditOwnerActivity extends AppCompatActivity {
         errType             = (TextView)             findViewById(R.id.txt_vehicle_type_error);
         errProduceYear      = (TextView)             findViewById(R.id.txt_produce_year_error);
         errPrice            = (TextView)             findViewById(R.id.txt_price_error);
-
-
 
         btnRegister         = (Button)                  findViewById(R.id.btn_register);
         toolbar             = (FrameLayout)                 findViewById(R.id.toolbar);

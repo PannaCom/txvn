@@ -28,6 +28,7 @@ import com.quickcar.thuexe.Utilities.SharePreference;
 public class ActiveAccountActivity extends AppCompatActivity {
     private SharePreference preference;
     private Context mContext;
+    private Button btnResend, btnActive;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,16 +63,16 @@ public class ActiveAccountActivity extends AppCompatActivity {
                 finish();
             }
         });
-        Button btnSet = (Button) dialog.findViewById(R.id.btn_active);
-        Button btnCancel = (Button) dialog.findViewById(R.id.btn_resend);
-        btnSet.setOnClickListener(new View.OnClickListener()
+        btnActive = (Button) dialog.findViewById(R.id.btn_active);
+        btnResend = (Button) dialog.findViewById(R.id.btn_resend);
+        btnActive.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v) {
                 sendActive(edtCode.getText().toString());
             }
         });
-        btnCancel.setOnClickListener(new View.OnClickListener()
+        btnResend.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v) {
@@ -82,6 +83,8 @@ public class ActiveAccountActivity extends AppCompatActivity {
     }
 
     private void reSend() {
+        btnResend.setEnabled(false);
+        btnResend.setClickable(false);
         RequestParams params;
         params = new RequestParams();
         params.put("idtaixe", preference.getDriverId());
@@ -142,7 +145,7 @@ public class ActiveAccountActivity extends AppCompatActivity {
                 int result = Integer.valueOf(new String(responseBody));
                 if (result != 0) {
                     Toast.makeText(mContext, "Tài khoản kích hoạt thành công", Toast.LENGTH_SHORT).show();
-                    //preference.saveActive(true);
+                    preference.saveActive(true);
                     Intent intent = new Intent(mContext, ListPassengerActivity.class);
                     startActivity(intent);;
                     finish();

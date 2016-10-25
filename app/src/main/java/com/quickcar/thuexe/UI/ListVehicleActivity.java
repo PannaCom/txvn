@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Handler;
+import android.os.Process;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -20,6 +22,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,6 +35,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -62,12 +66,13 @@ public class ListVehicleActivity extends AppCompatActivity {
     private OnDataPass dataPasser;
     private OnDataMap dataMap;
     private ImageView imgBack, imgMenu;
-    private Spinner categorySpinner , carSizeSpinner, carTypeSpinner;
+    private Spinner categorySpinner , carSizeSpinner, carTypeSpinner, priceSpinner;
     private AutoCompleteTextView txtcarName;
-    private ArrayList<String> arrCarModel, arrCarMade, arrCarSize, arrCarType;
+    private ArrayList<String> arrCarModel, arrCarMade, arrCarSize, arrCarType, arrayPrice;
     private LinearLayout layoutSearch;
     private SharePreference preference;
     private String carMade, carName,carSize,carType;
+    private boolean doubleBackToExitPressedOnce = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +90,8 @@ public class ListVehicleActivity extends AppCompatActivity {
         txtcarName                  =   (AutoCompleteTextView)  findViewById(R.id.spinner_name);
         carSizeSpinner              =   (Spinner)               findViewById(R.id.spinner_size);
         carTypeSpinner              =   (Spinner)               findViewById(R.id.spinner_type);
+        priceSpinner                =   (Spinner)               findViewById(R.id.spinner_price);
+
         layoutSearch                =   (LinearLayout)          findViewById(R.id.layout_search);
 
         buttonFilter.setOnClickListener(filter_click_listener);
@@ -474,5 +481,39 @@ public class ListVehicleActivity extends AppCompatActivity {
                 })
                 .setCancelable(false)
                 .show();
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && mDrawerLayout.isDrawerOpen(Gravity.START) ) {
+            mDrawerLayout.closeDrawer(Gravity.LEFT);
+            return true;
+        }
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            if (mDrawerLayout.isDrawerOpen(Gravity.RIGHT))
+                mDrawerLayout.closeDrawer(Gravity.RIGHT);
+            else {
+                if (doubleBackToExitPressedOnce) {
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(mContext, getResources().getString(R.string.notice_close_app), Toast.LENGTH_SHORT).show();
+                    this.doubleBackToExitPressedOnce = true;
+                    new Handler().postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            doubleBackToExitPressedOnce=false;
+                        }
+                    }, 2000);
+                }
+            }
+            return true;
+        } else if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 1) {
+            finish();
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 }

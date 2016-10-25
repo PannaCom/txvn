@@ -25,5 +25,6 @@
     android:layout_height="wrap_content"
     android:ellipsize="marquee"
     android:gravity="center_horizontal|bottom"
+    android:textSize="18sp"
     android:textColor="@drawable/click_spinner"
     android:textAlignment="inherit"/>

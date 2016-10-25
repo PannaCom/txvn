@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btn_active"
-            android:background="@color/white"
+            android:background="@drawable/click_active"
             android:layout_weight="1" />
         <View
             android:layout_width="1dp"
@@ -70,7 +70,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btn_resend"
-            android:background="@color/white"
+            android:background="@drawable/click_active"
             android:layout_weight="1" />
     </LinearLayout>
 

@@ -293,6 +293,7 @@
                                 android:textSize="16sp"
                                 android:hint="VD : Lexus RX 350 2017 "
                                 android:textColor="@color/colorPrimaryDark"
+                                android:imeOptions="actionDone"
                                 android:id="@+id/txt_car_name" />
 
                         </LinearLayout>

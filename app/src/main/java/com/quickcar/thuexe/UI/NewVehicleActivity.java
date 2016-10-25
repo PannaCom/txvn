@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -122,7 +123,7 @@ public class NewVehicleActivity extends AppCompatActivity {
 
         toolbar             = (FrameLayout)                 findViewById(R.id.toolbar);
 
-
+        txtCarName.setOnKeyListener(onSoftKeyboardDonePress);
 
 
 
@@ -534,4 +535,19 @@ public class NewVehicleActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+    // method not working:
+    private View.OnKeyListener onSoftKeyboardDonePress=new View.OnKeyListener()
+    {
+        public boolean onKey(View v, int keyCode, KeyEvent event)
+        {
+            if (event.getKeyCode() == KeyEvent.FLAG_EDITOR_ACTION)
+            {
+                // code to hide the soft keyboard
+                InputMethodManager imm = (InputMethodManager) getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(txtCarName.getApplicationWindowToken(), 0);
+            }
+            return false;
+        }
+    };
 }

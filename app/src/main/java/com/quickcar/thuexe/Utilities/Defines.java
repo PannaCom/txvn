@@ -73,5 +73,5 @@ public class Defines {
     public static String[] Das_Auto = {"Polo sedan 2014","Polo sedan 2015","Polo sedan GP 2015","Polo hatchback 2015","Polo hatchback 2016","Passat S 2016","Passat E 2016","Passat GP 2016","Tiguan 2015","Touareg 2015","Touareg GP 2015"};
 
     public static String[][] category  = {Audi, BMW, Chevrolet, Ford,Honda,Hyundai,KIA,Land_Rover,Lexus,Mazda,Mercedes_Benz,Mini_Cooper,Mitsubishi_motors,Nissan,Peugeot,Porsche,Renault,Subaru,Suzuki,Toyota,Das_Auto};
-    public static String[] CarMade  = {"Audi", "BMW", "Chevrolet", "Ford","Honda","Hyundai","KIA","Land_Rover","Lexus","Mazda","Mercedes_Benz","Mini_Cooper","Mitsubishi_motors","Nissan","Peugeot","Porsche","Renault","Subaru","Suzuki","Toyota","Das_Auto"};
+    public static String[] CarMade  = {"Audi", "BMW", "Chevrolet", "Ford","Honda","Hyundai","KIA","Land Rover","Lexus","Mazda","Mercedes_Benz","Mini Cooper","Mitsubishi motors","Nissan","Peugeot","Porsche","Renault","Subaru","Suzuki","Toyota","Das Auto"};
 }
