@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.quickcar.thuexe.Controller.ActiveCarAdapter;
+import com.quickcar.thuexe.Controller.CarTypesAdapter;
 import com.quickcar.thuexe.Models.CarInforObject;
 import com.quickcar.thuexe.Models.FilterObject;
 import com.quickcar.thuexe.R;
@@ -90,6 +91,9 @@ public class CarListFragment extends Fragment {
         vehicleView                 =   (RecyclerView)          getView().findViewById(R.id.vehicle_view);
         txtNoResult                 =   (TextView)              getView().findViewById(R.id.txt_no_result);
         swipeToRefresh              =   (SwipeRefreshLayout)     getView().findViewById(R.id.swipe_view);
+
+
+
         swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -145,6 +149,7 @@ public class CarListFragment extends Fragment {
 
         params.put("lon", longitude);
         params.put("lat", latitude);
+        params.put("order", Defines.FILTER_ORDER);
         Log.i("params deleteDelivery", params.toString());
         vehicles = new ArrayList<>();
         dialog = new ProgressDialog(getContext());
@@ -175,6 +180,7 @@ public class CarListFragment extends Fragment {
                         adapter = new ActiveCarAdapter(mContext, vehicles);
                         vehicleView.setAdapter(adapter);
                         //swipeToRefresh.setRefreshing(false);
+
                     }else{
                         txtNoResult.setVisibility(View.VISIBLE);
                         txtNoResult.setText("Không có xe nào cho tuyến này");
@@ -220,7 +226,7 @@ public class CarListFragment extends Fragment {
             String carType      = jsonobject.getString("car_type");
             String carMade      = jsonobject.getString("car_made");
             double distance     = jsonobject.getDouble("D");
-            String price        = jsonobject.getString("car_price");
+            int price           = jsonobject.getInt("car_price");
             CarInforObject busInfor = new CarInforObject(name,phone,carModel,carMade,carType,carSize,distance,price);
             vehicles.add(busInfor);
         } catch (JSONException e) {

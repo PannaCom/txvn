@@ -17,11 +17,11 @@ public class Defines {
     public static  final String     URL_GET_AROUND              = HOSTNAME + "Api/getaround";
     public static  final String     URL_ACTIVE                  = HOSTNAME + "Api/acitive";
     public static  final String     URL_RESEND                  = HOSTNAME + "Api/resendactive";
-//    public static  final String     URL_LOGIN                   = HOSTNAME + "Appi/login";
+    public static  final String     URL_GET_ALL_CAR_MADE        = HOSTNAME + "Api/getAllCarMadeList";
     public static  final String     URL_LOCATE                  = HOSTNAME + "Api/locate";
     public static  final String     URL_GET_CAR_NAME            = HOSTNAME + "Api/getCarModelList";
     public static  final String     URL_GET_CAR_MADE            = HOSTNAME + "Api/getCarMadeList";
- //   public static  final String     URL_NEW_VEHICLE             = HOSTNAME + "Appi/getauto";
+    public static  final String     URL_GET_CAR_TYPE             = HOSTNAME + "Api/getAllCarTypeList";
     public static  final String     URL_REGISTER_VEHICLE        = HOSTNAME + "Api/register";
 
 
@@ -39,6 +39,7 @@ public class Defines {
     public static  final String     OWNER_ID_ACTION             = "6";
     public static  final String     CAR_NAME_ACTION             = "8";
     public static CarInforObject    FilterInfor                 = null;
+    public static  int              FILTER_ORDER                = 0;
     public static CarInforObject    SpinnerSelect               = new CarInforObject();
     public static String token                 = "";
 

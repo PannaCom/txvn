@@ -75,7 +75,10 @@ public class ActiveCarAdapter extends RecyclerView.Adapter<ActiveCarAdapter.Vehi
             }
         });
 
-        holder.txtCarPrice.setText(vehicles.get(position).getPrice());
+        if (vehicles.get(position).getPrice() == -1)
+            holder.txtCarPrice.setText("Giá thỏa thuận");
+        else
+            holder.txtCarPrice.setText(vehicles.get(position).getPrice()+" VNĐ");
         holder.txtCarType.setText(vehicles.get(position).getCarType());
         holder.txtCarSize.setText(vehicles.get(position).getCarSize()+ " chỗ");
         holder.txtPhone.setText(vehicles.get(position).getPhone());

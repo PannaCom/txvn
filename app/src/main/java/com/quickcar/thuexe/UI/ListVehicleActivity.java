@@ -17,7 +17,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -33,16 +35,20 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.quickcar.thuexe.Controller.CarTypesAdapter;
 import com.quickcar.thuexe.Models.CarInforObject;
 import com.quickcar.thuexe.R;
 import com.quickcar.thuexe.Utilities.BaseService;
 import com.quickcar.thuexe.Utilities.Defines;
+import com.quickcar.thuexe.Utilities.GetAllCarData;
 import com.quickcar.thuexe.Utilities.SharePreference;
 
 import org.json.JSONArray;
@@ -66,13 +72,17 @@ public class ListVehicleActivity extends AppCompatActivity {
     private OnDataPass dataPasser;
     private OnDataMap dataMap;
     private ImageView imgBack, imgMenu;
-    private Spinner categorySpinner , carSizeSpinner, carTypeSpinner, priceSpinner;
+    private Spinner categorySpinner , carSizeSpinner, carTypeSpinner;
     private AutoCompleteTextView txtcarName;
     private ArrayList<String> arrCarModel, arrCarMade, arrCarSize, arrCarType, arrayPrice;
     private LinearLayout layoutSearch;
     private SharePreference preference;
     private String carMade, carName,carSize,carType;
+    private RadioGroup radioOrderGroup;
+    private RadioButton radioOrderButton;
     private boolean doubleBackToExitPressedOnce = false;
+    private RecyclerView lvCarTypes;
+    private CarTypesAdapter adapterImg;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +90,6 @@ public class ListVehicleActivity extends AppCompatActivity {
         mContext = this;
         preference= new SharePreference(this);
         moveDrawerToTop();
-        getDataSearch();
         viewPager                   =   (ViewPager)             findViewById(R.id.viewpager);
         mDrawerLayout               =   (DrawerLayout)          findViewById(R.id.drawer_layout);
         mDrawer                     =   (RelativeLayout)        findViewById(R.id.drawer);
@@ -90,12 +99,12 @@ public class ListVehicleActivity extends AppCompatActivity {
         txtcarName                  =   (AutoCompleteTextView)  findViewById(R.id.spinner_name);
         carSizeSpinner              =   (Spinner)               findViewById(R.id.spinner_size);
         carTypeSpinner              =   (Spinner)               findViewById(R.id.spinner_type);
-        priceSpinner                =   (Spinner)               findViewById(R.id.spinner_price);
-
+        radioOrderGroup             =   (RadioGroup)            findViewById(R.id.radio_order);
         layoutSearch                =   (LinearLayout)          findViewById(R.id.layout_search);
+        lvCarTypes                  =   (RecyclerView)          findViewById(R.id.lv_car_type);
 
         buttonFilter.setOnClickListener(filter_click_listener);
-        Bundle extras = getIntent().getExtras();
+        //Bundle extras = getIntent().getExtras();
 
         setupViewPager(viewPager);
 
@@ -103,7 +112,6 @@ public class ListVehicleActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
 
-        prepareDataSliding();
         imgBack = (ImageView) findViewById(R.id.img_back);
         imgMenu = (ImageView) findViewById(R.id.img_menu);
         imgMenu.setOnClickListener(new View.OnClickListener() {
@@ -131,23 +139,50 @@ public class ListVehicleActivity extends AppCompatActivity {
                 finish();
             }
         });
-        txtcarName.setText(Defines.FilterInfor.getCarModel());
-        txtcarName.addTextChangedListener(new TextWatcher() {
+        getDataSearch();
+        GetAllCarData carData = new GetAllCarData(this, new GetAllCarData.onDataReceived() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void onReceived(ArrayList<String> categories, ArrayList<String> types) {
+                arrCarMade = categories;
+                arrCarType = types;
+                arrCarMade.add(0,"Tất cả");
+                arrCarType.add(0,"Tất cả");
+                adapterImg = new CarTypesAdapter(mContext, arrCarType, lvCarTypes);
+                lvCarTypes.setAdapter(adapterImg);
+                lvCarTypes.setHasFixedSize(true);
+                //Set RecyclerView type according to intent value
+                lvCarTypes.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
+                adapterImg.setOnItemClickListener(new CarTypesAdapter.onClickListener() {
+                    @Override
+                    public void onItemClick(int position) {
+                        Defines.FilterInfor.setCarType(arrCarType.get(position));
+                        dataPasser.onDataPass();
+                        dataMap.OnDataMap();
+                        Defines.SpinnerSelect.setCarType(arrCarType.get(position));
+                    }
+                });
+                prepareDataSliding();
+                txtcarName.setText(Defines.FilterInfor.getCarModel());
+                txtcarName.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
+                    }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                requestCarName(s.toString());
-            }
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        requestCarName(s.toString());
+                    }
 
-            @Override
-            public void afterTextChanged(Editable s) {
+                    @Override
+                    public void afterTextChanged(Editable s) {
 
+                    }
+                });
             }
         });
+
+
 
     }
 
@@ -246,11 +281,12 @@ public class ListVehicleActivity extends AppCompatActivity {
 
             @Override
             public void onDrawerOpened(View drawerView) {
+                prepareFilterData();
             }
 
             @Override
             public void onDrawerClosed(View drawerView) {
-                prepareFilterData();
+
             }
 
             @Override
@@ -261,26 +297,12 @@ public class ListVehicleActivity extends AppCompatActivity {
     }
     private void fillFilterData(){
 
-        /// car made
-        arrCarMade = new ArrayList<>();
-        arrCarMade.add("Tất cả");
-        for (int i = 0; i < Defines.CarMade.length; i++)
-            arrCarMade.add(Defines.CarMade[i]);
-
         // car size
 
         arrCarSize = new ArrayList<>();
         arrCarSize.add("Tất cả");
         for (int i = 0 ; i< getResources().getStringArray(R.array.size_array).length; i++)
             arrCarSize.add(getResources().getStringArray(R.array.size_array)[i]);
-
-        // car type
-
-        arrCarType = new ArrayList<>();
-        arrCarType.add("Tất cả");
-        for (int i = 0 ; i< getResources().getStringArray(R.array.type_array).length; i++)
-            arrCarType.add(getResources().getStringArray(R.array.type_array)[i]);
-
     }
     private void prepareFilterData() {
 
@@ -398,10 +420,21 @@ public class ListVehicleActivity extends AppCompatActivity {
                 vehicles = new ArrayList<>();
                 adapter = new ActiveCarAdapter(mContext, vehicles);
                 vehicleView.setAdapter(adapter);*/
+                // get selected radio button from radioGroup
+                int selectedId = radioOrderGroup.getCheckedRadioButtonId();
 
+                // find the radiobutton by returned id
+                radioOrderButton = (RadioButton) findViewById(selectedId);
+
+                if (radioOrderButton.getId() == R.id.radio_distance)
+                    Defines.FILTER_ORDER = 0;
+                if (radioOrderButton.getId() == R.id.radio_price)
+                    Defines.FILTER_ORDER = 1;
                 dataPasser.onDataPass();
                 dataMap.OnDataMap();
                 mDrawerLayout.closeDrawer(Gravity.LEFT);
+                adapterImg.setSelectedPostion(Defines.SpinnerSelect.getCarType());
+                adapterImg.notifyDataSetChanged();
             }
         });
     }

@@ -102,6 +102,7 @@ public class MapCarActiveFragment extends Fragment implements OnMapReadyCallback
             params.put("car_size", Defines.FilterInfor.getCarSize().substring(0,1));
         params.put("lon", longitude);
         params.put("lat", latitude);
+        params.put("order", Defines.FILTER_ORDER);
         Log.i("params deleteDelivery", params.toString());
         //swipeToRefresh.setRefreshing(true);
         dialog = new ProgressDialog(getContext());

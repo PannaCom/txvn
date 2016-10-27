@@ -12,11 +12,11 @@ public class CarInforObject {
     private String carType;
     private String carSize;
     private double distance;
-    private String price;
+    private int price;
     public CarInforObject() {
     }
 
-    public CarInforObject(String name, String phone, String carModel, String carMade, String carType, String carSize, double distance, String price) {
+    public CarInforObject(String name, String phone, String carModel, String carMade, String carType, String carSize, double distance, int price) {
         this.name = name;
         this.phone = phone;
         this.carModel = carModel;
@@ -83,11 +83,11 @@ public class CarInforObject {
         this.distance = distance;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 }

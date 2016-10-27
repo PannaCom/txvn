@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuInflater;
@@ -43,12 +45,13 @@ import java.util.Calendar;
 import com.quickcar.thuexe.R;
 import com.quickcar.thuexe.Utilities.BaseService;
 import com.quickcar.thuexe.Utilities.Defines;
+import com.quickcar.thuexe.Utilities.GetAllCarData;
 import com.quickcar.thuexe.Utilities.SharePreference;
 import com.quickcar.thuexe.Utilities.Utilites;
 
 public class NewVehicleActivity extends AppCompatActivity {
     private AutoCompleteTextView txtCarName;
-    private ArrayList<String> aTypes, placeFrom, placeTo, aTimes, aReceive, aVehicleType, aName;
+    private ArrayList<String> aCategory, placeFrom, placeTo, aTimes, aReceive, aVehicleType, aName;
     private FrameLayout layoutBienSo, layoutCategory, layoutName, layoutPhone, layoutPrice,layoutCarName,layoutType, layoutSize, layoutProduceYear;
     private ImageView imgCategory, imgSize, imgProduceYear, imgVehicleType;
     private EditText txtName, txtTelephone, txtBienSo;
@@ -59,9 +62,9 @@ public class NewVehicleActivity extends AppCompatActivity {
     private Context mContext;
     private ImageView btnMenu;
     private Button btnRegister;
-    private int carPossition = 0;
+    private GetAllCarData carData;
     private SharePreference preference;
-    private String price;
+    private int price;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,7 +127,28 @@ public class NewVehicleActivity extends AppCompatActivity {
         toolbar             = (FrameLayout)                 findViewById(R.id.toolbar);
 
         txtCarName.setOnKeyListener(onSoftKeyboardDonePress);
+        txtCarName.addTextChangedListener(new TextWatcher() {
 
+            @Override
+            public void afterTextChanged(Editable s) {
+
+
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                requestCarName(s.toString());
+                Log.e("TAG",s.toString());
+
+            }
+
+        });
 
 
         layoutName.setOnClickListener(click_to_name_listener);
@@ -167,7 +191,17 @@ public class NewVehicleActivity extends AppCompatActivity {
                 });
             }
         });
+        carData = new GetAllCarData(this, new GetAllCarData.onDataReceived() {
+            @Override
+            public void onReceived(ArrayList<String> categories, ArrayList<String> types) {
+                aCategory = categories;
+                aVehicleType = types;
+            }
+        });
+
+
     }
+
     private void showDialogSwitchUser() {
         android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(this)
                 .setTitle("Thông báo")
@@ -414,10 +448,10 @@ public class NewVehicleActivity extends AppCompatActivity {
         public void onClick(View v) {
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setTitle("Chọn loại xe")
-                    .setSingleChoiceItems(R.array.type_array,-1, new DialogInterface.OnClickListener() {
+                    .setSingleChoiceItems(aVehicleType.toArray(new CharSequence[aVehicleType.size()]),-1, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String type = mContext.getResources().getStringArray(R.array.type_array)[which];
+                            String type =aVehicleType.get(which);
                             txtType.setText(type);
                             dialog.dismiss();
                         }
@@ -451,16 +485,11 @@ public class NewVehicleActivity extends AppCompatActivity {
         public void onClick(View v) {
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setTitle("Chọn loại xe")
-                    .setSingleChoiceItems(Defines.CarMade,-1, new DialogInterface.OnClickListener() {
+                    .setSingleChoiceItems(aCategory.toArray(new CharSequence[aCategory.size()]),-1, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String type = Defines.CarMade[which];
+                            String type = aCategory.get(which);
                             txtCategory.setText(type);
-
-                            carPossition = which;
-                            ArrayAdapter<String> adapterProvinceFrom = new ArrayAdapter<>(mContext,android.R.layout.simple_list_item_1, Defines.category[carPossition]);
-                            txtCarName.setAdapter(adapterProvinceFrom);
-                            txtCarName.setThreshold(1);
                             dialog.dismiss();
                         }
                     });
@@ -512,12 +541,14 @@ public class NewVehicleActivity extends AppCompatActivity {
                     .setSingleChoiceItems(R.array.price_array,-1, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            price = mContext.getResources().getStringArray(R.array.price_array)[which];
-                            if (which == 0)
-                                txtPrice.setText(price);
-                            else
+                            String sPrice = mContext.getResources().getStringArray(R.array.price_array)[which];
+                            if (which == 0) {
+                                price = -1;
+                                txtPrice.setText(sPrice);
+                            }else {
+                                price = Integer.valueOf(sPrice);
                                 txtPrice.setText(price+ " đ/km");
-
+                            }
                             dialog.dismiss();
                         }
                     });
@@ -550,4 +581,46 @@ public class NewVehicleActivity extends AppCompatActivity {
             return false;
         }
     };
+
+
+    private void requestCarName(String s) {
+        aName = new ArrayList<>();
+        RequestParams params;
+        params = new RequestParams();
+        params.put("keyword", s);
+        BaseService.getHttpClient().post(Defines.URL_GET_CAR_NAME,params, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+                // called when response HTTP status is "200 OK"
+                Log.i("JSON", new String(responseBody));
+                try {
+                    JSONArray arrayresult = new JSONArray(new String(responseBody));
+                    for (int i = 0; i < arrayresult.length(); i++) {
+                        JSONObject result = arrayresult.getJSONObject(i);
+                        String name = result.getString("name");
+                        aName.add(name);
+                    }
+                    ArrayAdapter<String> adapterProvinceFrom = new ArrayAdapter<>(mContext,android.R.layout.simple_list_item_1, aName);
+                    txtCarName.setAdapter(adapterProvinceFrom);
+                    txtCarName.setThreshold(1);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+            }
+        });
+    }
 }
