@@ -191,17 +191,29 @@ public class NewVehicleActivity extends AppCompatActivity {
                 });
             }
         });
-        carData = new GetAllCarData(this, new GetAllCarData.onDataReceived() {
-            @Override
-            public void onReceived(ArrayList<String> categories, ArrayList<String> types) {
-                aCategory = categories;
-                aVehicleType = types;
-            }
-        });
-
-
+        checkOnline();
     }
-
+    private void checkOnline(){
+        if (!Utilites.isOnline(mContext)){
+            android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(this)
+                    .setTitle("Thông báo")
+                    .setMessage("Bạn chưa kết nối mạng")
+                    .setCancelable(false)
+                    .setPositiveButton("Thử lại", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                        checkOnline();
+                        }
+                    })
+                    .show();
+        }else{
+            carData = new GetAllCarData(this, new GetAllCarData.onDataReceived() {
+                @Override
+                public void onReceived(ArrayList<String> categories, ArrayList<String> types) {
+                    aCategory = categories;
+                    aVehicleType = types;
+                }});
+        }
+    }
     private void showDialogSwitchUser() {
         android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(this)
                 .setTitle("Thông báo")

@@ -1,5 +1,6 @@
 package com.quickcar.thuexe.UI;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -98,9 +100,10 @@ public class ListPassengerActivity extends AppCompatActivity implements OnMapRea
         imgRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getCurrentLocation();
                 removeAllMarker();
+                getCurrentLocation();
                 getCarAround();
+
             }
         });
         imgMenu.setOnClickListener(new View.OnClickListener() {
@@ -127,8 +130,8 @@ public class ListPassengerActivity extends AppCompatActivity implements OnMapRea
 
     private void getCurrentLocation() {
         GPSTracker gps = new GPSTracker(this);
-        if (gps.canGetLocation()){
-            if (gps.handlePermissionsAndGetLocation()) {
+        if (gps.handlePermissionsAndGetLocation())
+            if (gps.canGetLocation()) {
                 latitude = gps.getLatitude();
                 longitude = gps.getLongitude();
                 if (!Defines.startThread) {
@@ -136,34 +139,59 @@ public class ListPassengerActivity extends AppCompatActivity implements OnMapRea
                     Thread t = new Thread(new locate());
                     t.start();
                 }
+            }else{
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setTitle("Thông báo");  // GPS not found
+                builder.setMessage("Chức năng này cần lấy vị trí hiện tại của bạn.Bạn có muốn bật định vị?"); // Want to enable?
+                builder.setPositiveButton("Tiếp tục", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS),1000);
+                    }
+                });
+                builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                builder.create().show();
             }
-        }else{
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Thông báo");  // GPS not found
-            builder.setMessage("Chức năng này cần lấy vị trí hiện tại của bạn.Bạn có muốn bật định vị?"); // Want to enable?
-            builder.setPositiveButton("Tiếp tục", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 1000:
+                final ProgressDialog locate = new ProgressDialog(mContext);
+                locate.setIndeterminate(true);
+                locate.setCancelable(false);
+                locate.setMessage("Đang lấy vị trí...");
+                locate.show();
+                GPSTracker gps  = new GPSTracker(this);
+                if (gps.getLongitude() == 0 && gps.getLatitude() ==0) {
+                    gps.getLocationCoodinate(new GPSTracker.LocateListener() {
+                        @Override
+                        public void onLocate(double mlongitude, double mlatitude) {
+                            removeAllMarker();
+                            getCurrentLocation();
+                            getCarAround();
+                            locate.dismiss();
+                            //Toast.makeText(mContext, mlongitude+","+mlatitude,Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }else{
+                    getCurrentLocation();
+                    //Toast.makeText(mContext, gps.getLongitude()+","+gps.getLatitude(),Toast.LENGTH_SHORT).show();
+                    locate.dismiss();
                 }
-            });
-            builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            builder.create().show();
+                break;
         }
     }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == Defines.REQUEST_CODE_LOCATION_PERMISSIONS) {
-            if (!Defines.startThread) {
-                Defines.startThread = true;
-                Thread t = new Thread(new locate());
-                t.start();
-            }
+            getCurrentLocation();
         }
     }
     private void sendLocationToServer(int status) {

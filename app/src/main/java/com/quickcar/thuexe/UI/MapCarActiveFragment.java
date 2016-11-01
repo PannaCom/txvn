@@ -55,7 +55,6 @@ public class MapCarActiveFragment extends Fragment implements OnMapReadyCallback
             public void onDataPass() {
                 removeAllMarker();
                 getCurrentLocation();
-                requestToGetListVehicle();
             }
         });
 
@@ -75,6 +74,7 @@ public class MapCarActiveFragment extends Fragment implements OnMapReadyCallback
         if (gps.canGetLocation()) {
             latitude = gps.getLatitude();
             longitude = gps.getLongitude();
+            requestToGetListVehicle();
         }
 
     }
@@ -203,7 +203,7 @@ public class MapCarActiveFragment extends Fragment implements OnMapReadyCallback
         mMap = googleMap;
         mMap.clear();
         getCurrentLocation();
-        requestToGetListVehicle();
+        //requestToGetListVehicle();
 
     }
     private void removeAllMarker(){

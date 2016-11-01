@@ -1,12 +1,14 @@
 
 package com.quickcar.thuexe.UI;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Handler;
 import android.os.Process;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -50,6 +52,7 @@ import com.quickcar.thuexe.Utilities.BaseService;
 import com.quickcar.thuexe.Utilities.Defines;
 import com.quickcar.thuexe.Utilities.GetAllCarData;
 import com.quickcar.thuexe.Utilities.SharePreference;
+import com.quickcar.thuexe.Widget.GPSTracker;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -185,6 +188,7 @@ public class ListVehicleActivity extends AppCompatActivity {
 
 
     }
+
 
     private void getDataSearch() {
         //try {
@@ -548,5 +552,47 @@ public class ListVehicleActivity extends AppCompatActivity {
         }
 
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == Defines.REQUEST_CODE_LOCATION_PERMISSIONS) {
+            if (dataMap != null)
+                dataMap.OnDataMap();
+            if (dataPasser != null)
+                dataPasser.onDataPass();
+        }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        final ProgressDialog locate = new ProgressDialog(mContext);
+        locate.setIndeterminate(true);
+        locate.setCancelable(false);
+        locate.setMessage("Đang lấy vị trí...");
+        locate.show();
+        GPSTracker gps = new GPSTracker(mContext);
+        if (gps.getLongitude() == 0 && gps.getLatitude() ==0) {
+            gps.getLocationCoodinate(new GPSTracker.LocateListener() {
+                @Override
+                public void onLocate(double mlongitude, double mlatitude) {
+                    if (dataMap != null)
+                        dataMap.OnDataMap();
+                    if (dataPasser != null)
+                        dataPasser.onDataPass();
+                    locate.dismiss();
+                    //Toast.makeText(mContext, mlongitude+","+mlatitude,Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else{
+            if (dataMap != null)
+                dataMap.OnDataMap();
+            if (dataPasser != null)
+                dataPasser.onDataPass();
+            //Toast.makeText(mContext, gps.getLongitude()+","+gps.getLatitude(),Toast.LENGTH_SHORT).show();
+            locate.dismiss();
+        }
+
     }
 }

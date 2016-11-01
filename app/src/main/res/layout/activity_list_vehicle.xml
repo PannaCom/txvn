@@ -29,4 +29,5 @@
         android:layout_gravity="center"
         android:id="@+id/txt_no_result" />
 
+
 </android.support.design.widget.CoordinatorLayout>

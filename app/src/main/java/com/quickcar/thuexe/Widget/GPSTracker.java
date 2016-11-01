@@ -45,7 +45,7 @@ public class GPSTracker extends Service implements LocationListener {
 
 	// Declaring a Location Manager
 	protected LocationManager locationManager;
-
+	private LocateListener listener;
 
 	public GPSTracker(Context context) {
 		this.mContext = context;
@@ -153,38 +153,14 @@ public class GPSTracker extends Service implements LocationListener {
 		return this.canGetLocation;
 	}
 
-	/**
-	 * Function to show settings alert dialog
-	 * On pressing Settings button will lauch Settings Options
-	 * */
-	/*public void showSettingsAlert(){
-		AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
-   	 
-        // Setting Dialog Title
-        alertDialog.setTitle(mContext.getResources().getString(R.string.gps_turn_on_detail));
- 
-        // Setting Dialog Message
-        alertDialog.setMessage(mContext.getResources().getString(R.string.gps_turn_on));
+	public void getLocationCoodinate(LocateListener listener){
+		this.listener = listener;
+	}
 
-        // On pressing Settings button
-        alertDialog.setPositiveButton(mContext.getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-				mContext.startActivity(intent);
-			}
-		});
- 
-        // on pressing cancel button
-        alertDialog.setNegativeButton(mContext.getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.cancel();
-			}
-		});
- 
-        // Showing Alert Message
-        alertDialog.show();
-	}*/
 	public void onLocationChanged(Location location) {
+		if (this.listener != null)
+			this.listener.onLocate(location.getLongitude(),location.getLatitude());
+		stopUsingGPS();
 	}
 
 	public void onProviderDisabled(String provider) {
@@ -200,5 +176,7 @@ public class GPSTracker extends Service implements LocationListener {
 	public IBinder onBind(Intent arg0) {
 		return null;
 	}
-
+	public interface LocateListener {
+		public void onLocate(double longitude, double latitude);
+	}
 }

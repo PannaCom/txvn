@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -24,6 +25,7 @@ import com.quickcar.thuexe.R;
 import com.quickcar.thuexe.Utilities.BaseService;
 import com.quickcar.thuexe.Utilities.Defines;
 import com.quickcar.thuexe.Utilities.SharePreference;
+import com.quickcar.thuexe.Utilities.Utilites;
 
 public class ActiveAccountActivity extends AppCompatActivity {
     private SharePreference preference;
@@ -69,6 +71,15 @@ public class ActiveAccountActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
+                if (!Utilites.isOnline(mContext)){
+                    Toast.makeText(mContext,"Không có kết nối mạng", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (edtCode.getText().toString().equals(""))
+                {
+                    Toast.makeText(mContext,"Bạn chưa nhập mã", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 sendActive(edtCode.getText().toString());
             }
         });
@@ -76,6 +87,10 @@ public class ActiveAccountActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
+                if (!Utilites.isOnline(mContext)){
+                    Toast.makeText(mContext,"Không có kết nối mạng", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 reSend();
             }
         });
@@ -123,6 +138,8 @@ public class ActiveAccountActivity extends AppCompatActivity {
     }
 
     private void sendActive(String code) {
+        btnActive.setEnabled(false);
+        btnActive.setClickable(false);
         RequestParams params;
         params = new RequestParams();
         params.put("idtaixe", preference.getDriverId());
@@ -151,6 +168,13 @@ public class ActiveAccountActivity extends AppCompatActivity {
                     finish();
                 }else
                     Toast.makeText(mContext, "Tài khoản kích hoạt thất bại", Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        btnActive.setEnabled(true);
+                        btnActive.setClickable(true);
+                    }
+                },2000);
 
             }
 

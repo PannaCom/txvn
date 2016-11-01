@@ -1,15 +1,23 @@
 package com.quickcar.thuexe.UI;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -70,7 +79,6 @@ public class CarListFragment extends Fragment {
             public void OnDataMap() {
                 resetBeforeFilter();
                 getCurrentLocation();
-                requestToGetListVehicle();
             }
         });
         return rootView;
@@ -90,15 +98,13 @@ public class CarListFragment extends Fragment {
     private void initComponents() {
         vehicleView                 =   (RecyclerView)          getView().findViewById(R.id.vehicle_view);
         txtNoResult                 =   (TextView)              getView().findViewById(R.id.txt_no_result);
-        swipeToRefresh              =   (SwipeRefreshLayout)     getView().findViewById(R.id.swipe_view);
-
+        swipeToRefresh              =   (SwipeRefreshLayout)    getView().findViewById(R.id.swipe_view);
 
 
         swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 getCurrentLocation();
-                requestToGetListVehicle();
             }
         });
         // set cardview
@@ -107,10 +113,8 @@ public class CarListFragment extends Fragment {
         vehicleView.setLayoutManager(llm);
         if (Utilites.isOnline(mContext)) {
             getCurrentLocation();
-            requestToGetListVehicle();
         }else
             showOffline();
-
     }
 
     private void showOffline() {
@@ -120,9 +124,30 @@ public class CarListFragment extends Fragment {
     private void getCurrentLocation() {
         GPSTracker gps = new GPSTracker(mContext);
         // check if GPS enabled
-        if (gps.canGetLocation()) {
-            latitude = gps.getLatitude();
-            longitude = gps.getLongitude();
+        if (handlePermissionsAndGetLocation())
+            if (gps.canGetLocation()) {
+                latitude = gps.getLatitude();
+                longitude = gps.getLongitude();
+                requestToGetListVehicle();
+
+        }else{
+            if (swipeToRefresh.isRefreshing())
+                swipeToRefresh.setRefreshing(false);
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setTitle("Thông báo");  // GPS not found
+            builder.setMessage("Chức năng này cần lấy vị trí hiện tại của bạn.Bạn có muốn bật định vị?"); // Want to enable?
+            builder.setPositiveButton("Tiếp tục", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS),1000);
+                }
+            });
+            builder.setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.create().show();
         }
 
     }
@@ -232,5 +257,15 @@ public class CarListFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+    public boolean handlePermissionsAndGetLocation() {
+        if (Build.VERSION.SDK_INT < 23)
+            return true;
+        int hasWriteContactsPermission = ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION);
+        if (hasWriteContactsPermission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions((Activity) mContext, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, Defines.REQUEST_CODE_LOCATION_PERMISSIONS);
+            return false;
+        }
+        return true;
     }
 }
