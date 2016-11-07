@@ -182,9 +182,13 @@ public class NewVehicleActivity extends AppCompatActivity {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getItemId() == R.id.switch_user){
-                            showDialogSwitchUser();
-                            return true;
+                        switch (item.getItemId()){
+                            case R.id.switch_user:
+                                showDialogSwitchUser();
+                                return true;
+                            case R.id.share_social:
+                                showDialogShareSocial();
+                                return true;
                         }
                         return false;
                     }
@@ -192,6 +196,14 @@ public class NewVehicleActivity extends AppCompatActivity {
             }
         });
         checkOnline();
+    }
+    private void showDialogShareSocial() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Chia sẻ");
+        String shareMessage = "Bạn cần thuê xe hay bạn là tài xế/nhà xe/hãng xe có xe riêng, hãy dùng thử ứng dụng thuê xe  trên di động tại http://thuexevn.com";
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+        startActivity(Intent.createChooser(shareIntent, "Chọn phương thức để chia sẻ"));
     }
     private void checkOnline(){
         if (!Utilites.isOnline(mContext)){

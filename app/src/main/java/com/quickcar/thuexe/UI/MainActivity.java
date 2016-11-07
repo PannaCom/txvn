@@ -1,5 +1,6 @@
 package com.quickcar.thuexe.UI;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,12 +18,15 @@ import com.quickcar.thuexe.Utilities.Utilites;
 public class MainActivity extends AppCompatActivity {
     private Button btnPassenger, btnBusOwner;
     private SharePreference preference;
+    private Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         preference = new SharePreference(this);
+        mContext = this;
         initComponents();
+
     }
 
 
@@ -51,7 +55,14 @@ public class MainActivity extends AppCompatActivity {
        1: owner
        2: passenger
     */
-
+    public static void share(Context context, String text, String subject, String title, String dialogHeaderText) {
+        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(android.content.Intent.EXTRA_SUBJECT, subject);
+        intent.putExtra(android.content.Intent.EXTRA_TEXT, text);
+        intent.putExtra(Intent.EXTRA_TITLE, title);
+        context.startActivity(Intent.createChooser(intent, dialogHeaderText));
+    }
     private View.OnClickListener passenger_click_listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -61,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
     };
+
+
 
      /*
     Bus owner click event

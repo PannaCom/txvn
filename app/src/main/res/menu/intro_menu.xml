@@ -7,4 +7,8 @@
         android:id="@+id/switch_user"
         android:title="Chuyển người dùng"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/share_social"
+        android:title="Chia sẻ"
+        app:showAsAction="never" />
 </menu>
