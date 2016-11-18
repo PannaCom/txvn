@@ -16,13 +16,15 @@ public class Defines {
     public static  final String     URL_LIST_ONL_VEHICLE        = HOSTNAME + "Api/getlistonline";
     public static  final String     URL_GET_AROUND              = HOSTNAME + "Api/getaround";
     public static  final String     URL_ACTIVE                  = HOSTNAME + "Api/acitive";
+    public static  final String     URL_RENEW                   = HOSTNAME + "Api/activecode";
     public static  final String     URL_RESEND                  = HOSTNAME + "Api/resendactive";
     public static  final String     URL_GET_ALL_CAR_MADE        = HOSTNAME + "Api/getAllCarMadeList";
     public static  final String     URL_LOCATE                  = HOSTNAME + "Api/locate";
     public static  final String     URL_GET_CAR_NAME            = HOSTNAME + "Api/getCarModelList";
     public static  final String     URL_GET_CAR_MADE            = HOSTNAME + "Api/getCarMadeList";
-    public static  final String     URL_GET_CAR_TYPE             = HOSTNAME + "Api/getAllCarTypeList";
+    public static  final String     URL_GET_CAR_TYPE            = HOSTNAME + "Api/getAllCarTypeList";
     public static  final String     URL_REGISTER_VEHICLE        = HOSTNAME + "Api/register";
+    public static  final String     URL_REGISTER_TOKEN          = HOSTNAME + "Api/PostRegId";
 
 
     public static  final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 123;

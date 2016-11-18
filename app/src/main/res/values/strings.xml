@@ -7,13 +7,13 @@
     <string name="register_again"><u>Sai số điện thoại? Đăng ký lại.</u></string>
 
 
-    <string-array name="vehicle_array">
+    <string-array name="vehicle_array" translatable="false">
         <item>Xe tư nhân trong bến</item>
         <item>Xe uy tín có đặt vé</item>
     </string-array>
 
 
-    <string-array name="size_array">
+    <string-array name="size_array" translatable="false">
         <item>4 chỗ</item>
         <item>5 chỗ</item>
         <item>7 chỗ</item>
@@ -23,7 +23,7 @@
         <item>40 chỗ</item>
         <item>50 chỗ</item>
     </string-array>
-    <string-array name="price_array">
+    <string-array name="price_array" translatable="false">
         <item>Thỏa thuận</item>
         <item>6000</item>
         <item>6500</item>
@@ -45,7 +45,7 @@
         <item>14500</item>
         <item>15000</item>
     </string-array>
-    <string-array name="type_array">
+    <string-array name="type_array" translatable="false">
         <item>Xe tự do</item>
         <item>Xe taxi</item>
         <item>Xe cưới</item>

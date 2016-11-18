@@ -68,6 +68,7 @@
         app:backgroundTint="@color/red_1"
         app:fabSize="normal"
         android:layout_gravity="bottom|right"
+        android:scaleType="center"
         android:layout_marginBottom="10dp"
         android:layout_marginRight="10dp"
         android:layout_width="wrap_content"

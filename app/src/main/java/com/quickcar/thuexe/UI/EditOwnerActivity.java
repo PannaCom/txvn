@@ -154,8 +154,8 @@ public class EditOwnerActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                requestCarName(s.toString());
-                Log.e("TAG",s.toString());
+                if (txtCategory.getText().toString().equals("")&& count >0)
+                    showDialogCarMade();
 
             }
 
@@ -212,6 +212,20 @@ public class EditOwnerActivity extends AppCompatActivity {
                 aVehicleType = types;
             }
         });
+    }
+    private void showDialogCarMade() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle("Thông báo")
+                .setMessage("Bạn phải nhập hãng xe trước")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                        txtCarName.setText("");
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
     private void hideAllError() {
 
@@ -476,6 +490,8 @@ public class EditOwnerActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             String type = aCategory.get(which);
                             txtCategory.setText(type);
+                            txtCarName.setText("");
+                            requestCarName();
                             dialog.dismiss();
                         }
                     });
@@ -554,11 +570,11 @@ public class EditOwnerActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void requestCarName(String s) {
+    private void requestCarName() {
         aName = new ArrayList<>();
         RequestParams params;
         params = new RequestParams();
-        params.put("keyword", s);
+        params.put("keyword", txtCategory.getText().toString());
         BaseService.getHttpClient().post(Defines.URL_GET_CAR_NAME,params, new AsyncHttpResponseHandler() {
 
             @Override

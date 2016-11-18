@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "193430184784",
+    "firebase_url": "https://thue-xe.firebaseio.com",
+    "project_id": "thue-xe",
+    "storage_bucket": "thue-xe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:193430184784:android:228a8846c09d8002",
+        "android_client_info": {
+          "package_name": "com.quickcar.thuexe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "193430184784-idrbf5vl7k47vbubti0h9sh93ovdvvug.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.quickcar.thuexe",
+            "certificate_hash": "6B8D317B144A20040B5B3FD6764B918282F2FD9E"
+          }
+        },
+        {
+          "client_id": "193430184784-1s0i0qilbqbmdmkumvf53kb5j22ecu4e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdw4TqK3t036ghTEoLicv2geSZbwUJaBU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "193430184784-1s0i0qilbqbmdmkumvf53kb5j22ecu4e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

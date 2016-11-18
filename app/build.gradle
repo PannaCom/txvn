@@ -35,4 +35,6 @@ dependencies {
     compile 'se.emilsjolander:stickylistheaders:2.7.0'
     compile 'joda-time:joda-time:2.9.4'
     compile 'com.google.android.gms:play-services-maps:9.4.0'
+    compile 'com.google.firebase:firebase-messaging:9.4.0'
 }
+apply plugin: 'com.google.gms.google-services'

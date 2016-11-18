@@ -2,9 +2,11 @@
 package com.quickcar.thuexe.UI;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Handler;
 import android.os.Process;
@@ -15,6 +17,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -43,6 +46,8 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.quickcar.thuexe.Controller.CarTypesAdapter;
@@ -86,6 +91,7 @@ public class ListVehicleActivity extends AppCompatActivity {
     private boolean doubleBackToExitPressedOnce = false;
     private RecyclerView lvCarTypes;
     private CarTypesAdapter adapterImg;
+    private ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -154,6 +160,14 @@ public class ListVehicleActivity extends AppCompatActivity {
                 arrCarType = types;
                 arrCarMade.add(0,"Tất cả");
                 arrCarType.add(0,"Tất cả");
+                if (!preference.getRegisterToken()) {
+                    dialog = new ProgressDialog(mContext);
+                    dialog.setMessage("Đang tải dữ liệu");
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.setCancelable(false);
+                    dialog.show();
+                    registerToken(preference.getToken());
+                }
                 adapterImg = new CarTypesAdapter(mContext, arrCarType, lvCarTypes);
                 lvCarTypes.setAdapter(adapterImg);
                 lvCarTypes.setHasFixedSize(true);
@@ -187,12 +201,51 @@ public class ListVehicleActivity extends AppCompatActivity {
                     }
                 });
             }
+
         });
 
 
 
     }
 
+    private void registerToken(String token) {
+
+        RequestParams params;
+        params = new RequestParams();
+        params.put("tobject", preference.getRole());
+        params.put("regid",  token);
+        params.put("os", 1);
+
+
+        Log.i("params deleteDelivery", params.toString());
+        BaseService.getHttpClient().post(Defines.URL_REGISTER_TOKEN, params, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+                // called when response HTTP status is "200 OK"
+                Log.i("JSON", new String(responseBody));
+                //parseJsonResult(new String(responseBody));
+                int result = Integer.valueOf(new String(responseBody));
+                if (result == 1)
+                    preference.saveRegisterToken(true);
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+                Log.i("JSON", new String(responseBody));
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+            }
+        });
+    }
     private void showDialogShareSocial() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");

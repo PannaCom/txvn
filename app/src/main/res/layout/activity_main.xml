@@ -9,18 +9,16 @@
     tools:context="com.quickcar.thuexe.UI.MainActivity">
 
     <FrameLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
-
-        android:layout_height="wrap_content">
-
+        android:layout_height="60dp"
+        android:background="#029ca0"
+        android:id="@+id/toolbar">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/car"
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/imageView13" />z
+            android:layout_gravity="center"
+            android:id="@+id/imageView15" />
     </FrameLayout>
 
     <LinearLayout

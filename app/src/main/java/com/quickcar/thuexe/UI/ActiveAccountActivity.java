@@ -27,6 +27,12 @@ import com.quickcar.thuexe.Utilities.Defines;
 import com.quickcar.thuexe.Utilities.SharePreference;
 import com.quickcar.thuexe.Utilities.Utilites;
 
+import org.joda.time.DateTime;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class ActiveAccountActivity extends AppCompatActivity {
     private SharePreference preference;
     private Context mContext;
@@ -163,6 +169,11 @@ public class ActiveAccountActivity extends AppCompatActivity {
                 if (result != 0) {
                     Toast.makeText(mContext, "Tài khoản kích hoạt thành công", Toast.LENGTH_SHORT).show();
                     preference.saveActive(true);
+                    preference.saveRegisterToken(false);
+                    DateTime dateobj = new DateTime();
+                    Log.e("TIME",dateobj.toString());
+                    preference.saveDateActive(dateobj.toString());
+                    preference.saveDayExpire(30);
                     Intent intent = new Intent(mContext, ListPassengerActivity.class);
                     startActivity(intent);;
                     finish();

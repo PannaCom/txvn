@@ -1,10 +1,12 @@
 package com.quickcar.thuexe.UI;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -16,8 +18,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -38,12 +44,18 @@ import com.quickcar.thuexe.Utilities.SharePreference;
 import com.quickcar.thuexe.Utilities.Utilites;
 import com.quickcar.thuexe.Widget.GPSTracker;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ListPassengerActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -54,14 +66,20 @@ public class ListPassengerActivity extends AppCompatActivity implements OnMapRea
     private Button btnWait, btnBusy;
     private ArrayList<Marker> arrMaker = new ArrayList<>();
     private Context mContext;
+    private ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_passenger);
+
         mContext = this;
         preference = new SharePreference(this);
+        if (!checkExpireToken()){
+            getCurrentLocation();
+        }
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        getCurrentLocation();
+
         mapFragment.getMapAsync(this);
 
         btnBusy     = (Button)      findViewById(R.id.btn_busy);
@@ -128,6 +146,153 @@ public class ListPassengerActivity extends AppCompatActivity implements OnMapRea
                         return false;
                     }
                 });
+            }
+        });
+        if (!preference.getRegisterToken()) {
+            dialog = new ProgressDialog(mContext);
+            dialog.setMessage("Đang tải dữ liệu");
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(false);
+            dialog.show();
+            registerToken(preference.getToken());
+        }
+    }
+
+    private boolean checkExpireToken() {
+        DateTime lastDay = new DateTime(preference.getDateActive());
+        DateTime now = new DateTime();
+
+        int days = Days.daysBetween(lastDay.withTimeAtStartOfDay(), now.withTimeAtStartOfDay()).getDays();
+
+        if (days > preference.getDayExpire()){
+            showDialogExpire();
+            return true;
+        }
+        return false;
+    }
+
+    private void showDialogExpire() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.renew_dialog);
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        Window window = dialog.getWindow();
+        lp.copyFrom(window.getAttributes());
+        //This makes the dialog take up the full width
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        window.setAttributes(lp);
+
+        final EditText edtCode = (EditText) dialog.findViewById(R.id.edt_code);
+
+
+        final Button btnActive = (Button) dialog.findViewById(R.id.btn_active);
+        btnActive.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                if (!Utilites.isOnline(mContext)){
+                    Toast.makeText(mContext,"Không có kết nối mạng", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (edtCode.getText().toString().equals(""))
+                {
+                    Toast.makeText(mContext,"Bạn chưa nhập mã", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                sendActive(edtCode.getText().toString(), btnActive, dialog);
+            }
+        });
+        dialog.show();
+    }
+
+    private void sendActive(String code, final Button btnActive, Dialog dialog ) {
+        btnActive.setEnabled(false);
+        btnActive.setClickable(false);
+        RequestParams params;
+        params = new RequestParams();
+        params.put("phone", preference.getPhone());
+        params.put("code",  code);
+
+        Log.i("params deleteDelivery", params.toString());
+
+        BaseService.getHttpClient().post(Defines.URL_RENEW, params, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+                // called when response HTTP status is "200 OK"
+                Log.i("JSON", new String(responseBody));
+                //parseJsonResult(new String(responseBody));
+                int result = Integer.valueOf(new String(responseBody));
+                if (result > 0) {
+                    preference.saveDayExpire(result);
+                    preference.saveDateActive(new DateTime().toString());
+                    getCurrentLocation();
+                }else
+                    Toast.makeText(mContext, "Tài khoản kích hoạt thất bại", Toast.LENGTH_SHORT).show();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        btnActive.setEnabled(true);
+                        btnActive.setClickable(true);
+                    }
+                },2000);
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+                Log.i("JSON", new String(responseBody));
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+            }
+        });
+    }
+
+    private void registerToken(String token) {
+
+        RequestParams params;
+        params = new RequestParams();
+        params.put("tobject", preference.getRole());
+        params.put("regid",  token);
+        params.put("os", 1);
+
+
+        Log.i("params deleteDelivery", params.toString());
+        BaseService.getHttpClient().post(Defines.URL_REGISTER_TOKEN, params, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+                // called when response HTTP status is "200 OK"
+                Log.i("JSON", new String(responseBody));
+                //parseJsonResult(new String(responseBody));
+                int result = Integer.valueOf(new String(responseBody));
+                if (result == 1)
+                    preference.saveRegisterToken(true);
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+                Log.i("JSON", new String(responseBody));
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
             }
         });
     }

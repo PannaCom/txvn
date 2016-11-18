@@ -112,9 +112,9 @@ public class MapCarActiveFragment extends Fragment implements OnMapReadyCallback
         dialog.show();
         // show current position
         LatLng sydney = new LatLng(latitude,longitude);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Vị trí của bạn"));
+        Marker marker = mMap.addMarker(new MarkerOptions().position(sydney).title("Vị trí của bạn"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney,10));
-
+        markerList.add(marker);
 
         BaseService.getHttpClient().post(Defines.URL_LIST_ONL_VEHICLE, params, new AsyncHttpResponseHandler() {
 

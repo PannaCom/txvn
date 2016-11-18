@@ -8,20 +8,22 @@ import android.preference.PreferenceManager;
 public class SharePreference {
 
     private Context activity;
-    private String TOKEN = "status";
+    private String STATUS = "status";
     private String NAME  = "name";
     private String PHONE = "phone";
     private String LOGIN = "login";
     private String LICENSE = "license";
-    private String DRIVER_PHONE = "driver phone";
+    private String REGISTER_TOKEN = "register token";
     private String CAR_INFOR = "car info";
     private String KEY_SEARCH = "search";
     private String ACTIVE = "active";
-    private String PARK_TO = "park to";
+    private String DATE_EXPIRE = "date expire";
     private String DRIVER_ID = "driver id";
     private String OWNER_NAME = "owner name";
     private String TYPE = "type";
     private String ROLE = "role";
+    private String TOKEN = "token";
+    private String DATEACTIVE = "date active";
     // constructor
     public SharePreference(Context activity) {
         this.activity = activity;
@@ -29,12 +31,12 @@ public class SharePreference {
     public void saveStatus (int token) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putInt(TOKEN, token);
+        editor.putInt(STATUS, token);
         editor.apply();
     }
     public int getStatus() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
-        return sp.getInt(TOKEN, 0);
+        return sp.getInt(STATUS, 0);
     }
 
     public void saveName(String name) {
@@ -87,15 +89,15 @@ public class SharePreference {
     }
 
 
-    public void saveDriverPhone(String phone) {
+    public void saveRegisterToken(boolean register) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString(DRIVER_PHONE, phone);
+        editor.putBoolean(REGISTER_TOKEN, register);
         editor.apply();
     }
-    public String getDriverPhone() {
+    public boolean getRegisterToken() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
-        return sp.getString(DRIVER_PHONE,"");
+        return sp.getBoolean(REGISTER_TOKEN,false);
     }
     public void saveCarInfor(String place) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
@@ -150,15 +152,15 @@ public class SharePreference {
         return sp.getBoolean(ACTIVE, false);
     }
 
-    public void saveParkEnd(String park) {
+    public void saveDayExpire(int count) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString(PARK_TO, park);
+        editor.putInt(DATE_EXPIRE, count);
         editor.apply();
     }
-    public String getParkEnd() {
+    public int getDayExpire() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
-        return sp.getString(PARK_TO,"");
+        return sp.getInt(DATE_EXPIRE,0);
     }
     public void saveDriverId(int id) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
@@ -179,6 +181,27 @@ public class SharePreference {
     public int getRole() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
         return sp.getInt(ROLE,0);
+    }
+    public void saveToken(String token) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(TOKEN, token);
+        editor.apply();
+    }
+    public String getToken() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
+        return sp.getString(TOKEN,"");
+    }
+
+    public void saveDateActive(String date) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(DATEACTIVE, date);
+        editor.apply();
+    }
+    public String getDateActive() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
+        return sp.getString(DATEACTIVE,"");
     }
 
 }
