@@ -80,8 +80,7 @@ public class ListVehicleActivity extends AppCompatActivity {
     private OnDataPass dataPasser;
     private OnDataMap dataMap;
     private ImageView imgBack, imgMenu;
-    private Spinner categorySpinner , carSizeSpinner, carTypeSpinner;
-    private AutoCompleteTextView txtcarName;
+    private Spinner categorySpinner , carSizeSpinner, carTypeSpinner,carModelSpinner;
     private ArrayList<String> arrCarModel, arrCarMade, arrCarSize, arrCarType, arrayPrice;
     private LinearLayout layoutSearch;
     private SharePreference preference;
@@ -105,7 +104,7 @@ public class ListVehicleActivity extends AppCompatActivity {
         buttonFilter                =   (FloatingActionButton)  findViewById(R.id.btn_filter);
 
         categorySpinner             =   (Spinner)               findViewById(R.id.spinner_category);
-        txtcarName                  =   (AutoCompleteTextView)  findViewById(R.id.spinner_name);
+        carModelSpinner             =   (Spinner)               findViewById(R.id.spinner_car_name);
         carSizeSpinner              =   (Spinner)               findViewById(R.id.spinner_size);
         carTypeSpinner              =   (Spinner)               findViewById(R.id.spinner_type);
         radioOrderGroup             =   (RadioGroup)            findViewById(R.id.radio_order);
@@ -176,30 +175,20 @@ public class ListVehicleActivity extends AppCompatActivity {
                 adapterImg.setOnItemClickListener(new CarTypesAdapter.onClickListener() {
                     @Override
                     public void onItemClick(int position) {
+                        Defines.SpinnerSelect.setCarType(arrCarType.get(position));
                         Defines.FilterInfor.setCarType(arrCarType.get(position));
+                        Defines.FilterInfor.setCarModel(Defines.SpinnerSelect.getCarModel());
+                        Defines.FilterInfor.setCarType(Defines.SpinnerSelect.getCarType());
+                        Defines.FilterInfor.setCarMade(Defines.SpinnerSelect.getCarMade());
+                        Defines.FilterInfor.setCarModel(Defines.SpinnerSelect.getCarModel());
+                        Defines.FilterInfor.setCarSize(Defines.SpinnerSelect.getCarSize());
                         dataPasser.onDataPass();
                         dataMap.OnDataMap();
-                        Defines.SpinnerSelect.setCarType(arrCarType.get(position));
+
                     }
                 });
                 prepareDataSliding();
-                txtcarName.setText(Defines.FilterInfor.getCarModel());
-                txtcarName.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        requestCarName(s.toString());
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
-                });
             }
 
         });
@@ -267,7 +256,7 @@ public class ListVehicleActivity extends AppCompatActivity {
             Defines.FilterInfor.setCarSize("Tất cả");
             Defines.FilterInfor.setCarMade("Tất cả");
             Defines.FilterInfor.setCarType("Tất cả");
-            Defines.FilterInfor.setCarModel("");
+            Defines.FilterInfor.setCarModel("Tất cả");
        /* } catch (JSONException e) {
             e.printStackTrace();
         }*/
@@ -377,13 +366,13 @@ public class ListVehicleActivity extends AppCompatActivity {
     private void prepareFilterData() {
 
         fillFilterData();
-        //arrCarModel = new ArrayList<>();
+        arrCarModel = new ArrayList<>();
+        arrCarModel.add("Tất cả");
 
-
-       /* final ArrayAdapter<String> adapterName = new ArrayAdapter<>(this, R.layout.custom_spiner,arrCarModel);
+        final ArrayAdapter<String> adapterName = new ArrayAdapter<>(this, R.layout.custom_spiner,arrCarModel);
         adapterName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        carNameSpinner.setAdapter(adapterName);
-        carNameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        carModelSpinner.setAdapter(adapterName);
+        carModelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int index, long id) {
                 if (Defines.FilterInfor != null && arrCarModel.size()>0) {
@@ -394,7 +383,7 @@ public class ListVehicleActivity extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
-        });*/
+        });
 
         ArrayAdapter<String> adapterCategory = new ArrayAdapter<>(this, R.layout.custom_spiner,arrCarMade);
         adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -404,26 +393,14 @@ public class ListVehicleActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int index, long id) {
                 if (Defines.FilterInfor != null) {
                     Defines.SpinnerSelect.setCarMade(arrCarMade.get(index));
-                    /*if (index >0) {
-                        arrCarModel.clear();
-                        arrCarModel.add("Tất cả");
-                        for (int i = 0; i < Defines.category[index-1].length; i++)
-                            arrCarModel.add(Defines.category[index-1][i]);
-                        adapterName.notifyDataSetChanged();
-                        boolean checkname = false;
-                        for (int i = 0; i < arrCarModel.size(); i++) {
-                            if (arrCarModel.get(i).equals(Defines.FilterInfor.getCarModel())) {
-                                carNameSpinner.setSelection(i);
-                                checkname = true;
-                            }
-                        }
-                        if (!checkname)
-                            carNameSpinner.setSelection(0);
+                    if (index >0) {
+                        carModelSpinner.setSelection(0);
+                        requestCarName(arrCarMade.get(index), adapterName);
                     }else{
                         arrCarModel.clear();
                         arrCarModel.add("Tất cả");
                         adapterName.notifyDataSetChanged();
-                    }*/
+                    }
 
                 }
             }
@@ -479,7 +456,7 @@ public class ListVehicleActivity extends AppCompatActivity {
         layoutSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Defines.SpinnerSelect.setCarModel(txtcarName.getText().toString());
+                Defines.FilterInfor.setCarModel(Defines.SpinnerSelect.getCarModel());
                 Defines.FilterInfor.setCarType(Defines.SpinnerSelect.getCarType());
                 Defines.FilterInfor.setCarMade(Defines.SpinnerSelect.getCarMade());
                 Defines.FilterInfor.setCarModel(Defines.SpinnerSelect.getCarModel());
@@ -509,11 +486,12 @@ public class ListVehicleActivity extends AppCompatActivity {
         });
     }
 
-    private void requestCarName(String s) {
-        arrCarModel = new ArrayList<>();
+    private void requestCarName(String s, final ArrayAdapter<String> adapterName) {
+        arrCarModel.clear();
+        arrCarModel.add("Tất cả");
         RequestParams params;
         params = new RequestParams();
-        params.put("keyword", s);
+        params.put("keyword",s);
         BaseService.getHttpClient().post(Defines.URL_GET_CAR_NAME,params, new AsyncHttpResponseHandler() {
 
             @Override
@@ -532,9 +510,7 @@ public class ListVehicleActivity extends AppCompatActivity {
                         String name = result.getString("name");
                         arrCarModel.add(name);
                     }
-                    ArrayAdapter<String> adapterProvinceFrom = new ArrayAdapter<>(mContext,android.R.layout.simple_list_item_1, arrCarModel);
-                    txtcarName.setAdapter(adapterProvinceFrom);
-                    txtcarName.setThreshold(1);
+                    adapterName.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

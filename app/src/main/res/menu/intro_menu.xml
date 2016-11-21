@@ -9,6 +9,6 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/share_social"
-        android:title="Chia sẻ"
+        android:title="Mời người sử dụng"
         app:showAsAction="never" />
 </menu>

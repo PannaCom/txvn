@@ -74,8 +74,10 @@ public class ListPassengerActivity extends AppCompatActivity implements OnMapRea
 
         mContext = this;
         preference = new SharePreference(this);
-        if (!checkExpireToken()){
+        if (!checkExpireToken()) {
             getCurrentLocation();
+        }else{
+            showDialogExpire();
         }
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -165,7 +167,6 @@ public class ListPassengerActivity extends AppCompatActivity implements OnMapRea
         int days = Days.daysBetween(lastDay.withTimeAtStartOfDay(), now.withTimeAtStartOfDay()).getDays();
 
         if (days > preference.getDayExpire()){
-            showDialogExpire();
             return true;
         }
         return false;
@@ -208,7 +209,7 @@ public class ListPassengerActivity extends AppCompatActivity implements OnMapRea
         dialog.show();
     }
 
-    private void sendActive(String code, final Button btnActive, Dialog dialog ) {
+    private void sendActive(String code, final Button btnActive, final Dialog dialog ) {
         btnActive.setEnabled(false);
         btnActive.setClickable(false);
         RequestParams params;
@@ -234,9 +235,13 @@ public class ListPassengerActivity extends AppCompatActivity implements OnMapRea
                 if (result > 0) {
                     preference.saveDayExpire(result);
                     preference.saveDateActive(new DateTime().toString());
+                    removeAllMarker();
                     getCurrentLocation();
+                    getCarAround();
+                    Toast.makeText(mContext, "Tài khoản gia hạn thành công", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
                 }else
-                    Toast.makeText(mContext, "Tài khoản kích hoạt thất bại", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Tài khoản gia hạn thất bại", Toast.LENGTH_SHORT).show();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -417,7 +422,8 @@ public class ListPassengerActivity extends AppCompatActivity implements OnMapRea
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        getCarAround();
+        if (!checkExpireToken())
+            getCarAround();
     }
 
     private void getCarAround() {

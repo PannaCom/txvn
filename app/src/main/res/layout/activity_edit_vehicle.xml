@@ -201,6 +201,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@null"
+                                android:imeOptions="actionDone"
                                 android:singleLine="true"
                                 android:textSize="16sp"
                                 android:textColor="@color/colorPrimaryDark"
@@ -285,19 +286,25 @@
                                 android:text="Tên xe"
                                 android:textSize="13sp" />
 
-                            <AutoCompleteTextView
+                            <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@null"
                                 android:singleLine="true"
                                 android:textSize="16sp"
-                                android:hint="VD : Lexus RX 350 2017 "
                                 android:textColor="@color/colorPrimaryDark"
-                                android:imeOptions="actionDone"
                                 android:id="@+id/txt_car_name" />
 
                         </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|center_vertical"
+                            android:layout_marginRight="10dp"
+                            android:src="@mipmap/select" />
                     </FrameLayout>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -458,7 +465,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Bảng giá"
+                                android:text="Bảng giá (Đồng/Km)"
                                 android:textSize="13sp" />
 
                             <LinearLayout

@@ -1,10 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Thuê Xe</string>
-    <string name="register_again">Wrong telephone number? Re-register here</string>
-    <string name="active_account">Active account</string>
-    <string name="input_code_active">Enter active code from sms</string>
-    <string name="active">Active</string>
-    <string name="resend">Resend</string>
-    <string name="notice_close_app">Press back again to exit</string>
+
 </resources>

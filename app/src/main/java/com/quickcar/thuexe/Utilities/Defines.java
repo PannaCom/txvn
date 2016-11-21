@@ -25,11 +25,11 @@ public class Defines {
     public static  final String     URL_GET_CAR_TYPE            = HOSTNAME + "Api/getAllCarTypeList";
     public static  final String     URL_REGISTER_VEHICLE        = HOSTNAME + "Api/register";
     public static  final String     URL_REGISTER_TOKEN          = HOSTNAME + "Api/PostRegId";
-
+    public static  final String     URL_CALL                    = HOSTNAME + "Api/call";
 
     public static  final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 123;
     public static  final int REQUEST_CODE_LOCATION_PERMISSIONS = 234;
-    public static  final int REQUEST_CODE_COARSE_LOCATION_PERMISSIONS = 345;
+    public static  final int REQUEST_CODE_TELEPHONE_PERMISSIONS = 345;
 
 
     public static  final String     VEHICLE_PASS_ACTION         = "1";

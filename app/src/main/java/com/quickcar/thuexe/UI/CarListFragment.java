@@ -165,7 +165,11 @@ public class CarListFragment extends Fragment {
         else
             params.put("car_made", Defines.FilterInfor.getCarMade());
 
-        params.put("car_model", Defines.FilterInfor.getCarModel());
+        if (Defines.FilterInfor.getCarModel().equals("Tất cả"))
+            params.put("car_model", "");
+        else
+            params.put("car_model", Defines.FilterInfor.getCarModel());
+
 
         if (Defines.FilterInfor.getCarSize().equals("Tất cả"))
             params.put("car_size", "");
@@ -251,7 +255,7 @@ public class CarListFragment extends Fragment {
             String carType      = jsonobject.getString("car_type");
             String carMade      = jsonobject.getString("car_made");
             double distance     = jsonobject.getDouble("D");
-            int price           = jsonobject.getInt("car_price");
+            String price        = jsonobject.getString("car_price");
             CarInforObject busInfor = new CarInforObject(name,phone,carModel,carMade,carType,carSize,distance,price);
             vehicles.add(busInfor);
         } catch (JSONException e) {

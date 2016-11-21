@@ -46,12 +46,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class EditOwnerActivity extends AppCompatActivity {
-    private AutoCompleteTextView txtCarName;
     private ArrayList<String> aCategory, placeFrom, placeTo, aTimes, aReceive, aVehicleType, aName;
     private FrameLayout layoutBienSo, layoutCategory, layoutName, layoutPhone, layoutPrice,layoutCarName,layoutType, layoutSize, layoutProduceYear;
     private ImageView imgBack;
     private EditText txtName, txtTelephone, txtBienSo;
-    private TextView txtType, txtCategory, txtSize, txtProduceYear,txtPrice;
+    private TextView txtType, txtCategory, txtSize, txtProduceYear,txtPrice,txtCarName;
     private TextView errBienSo, errCategory, errName, errPhone, errPrice,errCarName,errType, errSize, errProduceYear;;
     private ProgressDialog dialog;
     private FrameLayout toolbar;
@@ -108,6 +107,7 @@ public class EditOwnerActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        requestCarName();
     }
 
 
@@ -137,29 +137,7 @@ public class EditOwnerActivity extends AppCompatActivity {
         txtSize             = (TextView)                findViewById(R.id.edt_size);
         txtProduceYear      = (TextView)                findViewById(R.id.edt_produce_year);
 
-        txtCarName          = (AutoCompleteTextView)    findViewById(R.id.txt_car_name);
-        txtCarName.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (txtCategory.getText().toString().equals("")&& count >0)
-                    showDialogCarMade();
-
-            }
-
-        });
+        txtCarName          = (TextView)                findViewById(R.id.txt_car_name);
 
         errName             = (TextView)             findViewById(R.id.txt_name_error);
         errPhone            = (TextView)             findViewById(R.id.txt_telephone_error);
@@ -532,7 +510,22 @@ public class EditOwnerActivity extends AppCompatActivity {
     private View.OnClickListener click_to_car_name_listener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            requestFocus(txtCarName);
+            if (txtCategory.getText().toString().equals("")) {
+                showDialogCarMade();
+                return;
+            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setTitle("Chọn tên xe")
+                    .setSingleChoiceItems(aName.toArray(new CharSequence[aName.size()]),-1, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String type = aName.get(which);
+                            txtCarName.setText(type);
+                            dialog.dismiss();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
         }
     };
     private View.OnClickListener click_to_price_listener = new View.OnClickListener() {
@@ -593,9 +586,6 @@ public class EditOwnerActivity extends AppCompatActivity {
                         String name = result.getString("name");
                         aName.add(name);
                     }
-                    ArrayAdapter<String> adapterProvinceFrom = new ArrayAdapter<>(mContext,android.R.layout.simple_list_item_1, aName);
-                    txtCarName.setAdapter(adapterProvinceFrom);
-                    txtCarName.setThreshold(1);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

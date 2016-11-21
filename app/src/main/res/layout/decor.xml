@@ -30,7 +30,7 @@
             android:layout_height="56dp">
 
             <TextView
-                android:text="Bộ lọc"
+                android:text="@string/filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView25"
@@ -59,7 +59,7 @@
                 android:weightSum="4"
                 android:layout_height="56dp">
                 <TextView
-                    android:text="Hãng xe"
+                    android:text="@string/car_made"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_marginLeft="10dp"
@@ -100,7 +100,7 @@
                 android:gravity="center_vertical"
                 android:layout_height="56dp">
                 <TextView
-                    android:text="Tên xe"
+                    android:text="@string/car_model"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_marginLeft="10dp"
@@ -113,13 +113,14 @@
                     android:weightSum="1"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                    <AutoCompleteTextView
+                    <Spinner
                         android:layout_width="0dp"
                         android:layout_weight="0.9"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:paddingRight="20dp"
-                        android:id="@+id/spinner_name" />
+                        android:background="@android:color/transparent"
+                        android:id="@+id/spinner_car_name" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -139,7 +140,7 @@
                 android:gravity="center_vertical"
                 android:layout_height="56dp">
                 <TextView
-                    android:text="Số chỗ"
+                    android:text="@string/car_size"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:textColor="@color/black"
@@ -179,7 +180,7 @@
                 android:gravity="center_vertical"
                 android:layout_height="56dp">
                 <TextView
-                    android:text="Loại xe"
+                    android:text="@string/car_type"
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_marginLeft="10dp"
@@ -229,12 +230,12 @@
                         android:layout_height="50dp"
                         android:textSize="18sp"
                         android:checked="true"
-                        android:text="Sắp xếp theo khoảng cách" />
+                        android:text="@string/filter_by_distance" />
                     <RadioButton
                         android:id="@+id/radio_price"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
-                        android:text="Sắp xếp theo giá"
+                        android:text="@string/sort_by_cost"
                         android:textSize="18sp"
                          />
 
@@ -252,7 +253,7 @@
                 android:gravity="center_vertical"
                 android:layout_height="56dp">
                 <TextView
-                    android:text="TÌM"
+                    android:text="@string/let_s_filter"
                     android:layout_marginLeft="10dp"
                     android:layout_width="0dp"
                     android:layout_weight="0.95"

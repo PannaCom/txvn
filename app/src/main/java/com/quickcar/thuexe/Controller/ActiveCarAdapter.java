@@ -2,6 +2,7 @@ package com.quickcar.thuexe.Controller;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,13 +18,19 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.quickcar.thuexe.Models.CarInforObject;
 import com.quickcar.thuexe.R;
+import com.quickcar.thuexe.UI.ActiveAccountActivity;
+import com.quickcar.thuexe.Utilities.BaseService;
 import com.quickcar.thuexe.Utilities.Defines;
+import com.quickcar.thuexe.Utilities.SharePreference;
 
 /**
  * Created by DatNT on 6/28/2016.
@@ -61,21 +68,20 @@ public class ActiveCarAdapter extends RecyclerView.Adapter<ActiveCarAdapter.Vehi
         holder.btnCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("tag", "tag");
-                Intent intent = new Intent(Intent.ACTION_CALL);
-
-                intent.setData(Uri.parse("tel:" + vehicles.get(position).getPhone()));
                 if (Build.VERSION.SDK_INT >= 22) {
                     if (ActivityCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions((Activity) mContext, new String[]{Manifest.permission.CALL_PHONE}, Defines.MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+                        ActivityCompat.requestPermissions((Activity) mContext, new String[]{Manifest.permission.CALL_PHONE}, Defines.REQUEST_CODE_TELEPHONE_PERMISSIONS);
                         return;
                     }
                 }
+                Log.e("tag", "tag");
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:" + vehicles.get(position).getPhone()));
                 mContext.startActivity(intent);
+                sendContactToServer(vehicles.get(position).getPhone());
             }
         });
-
-        if (vehicles.get(position).getPrice() == -1)
+        if (vehicles.get(position).getPrice().equals("-1"))
             holder.txtCarPrice.setText("Giá thỏa thuận");
         else
             holder.txtCarPrice.setText(vehicles.get(position).getPrice()+" vnđ/km");
@@ -84,11 +90,45 @@ public class ActiveCarAdapter extends RecyclerView.Adapter<ActiveCarAdapter.Vehi
         holder.txtPhone.setText(vehicles.get(position).getPhone());
         holder.txtDistance.setText(vehicles.get(position).getDistance()+ "km");
         DecimalFormat df = new DecimalFormat("#.#");
+
         if ((int) vehicles.get(position).getDistance() == 0)
             holder.txtDistance.setText(df.format(vehicles.get(position).getDistance()*1000) + " m");
         else
             holder.txtDistance.setText(df.format(vehicles.get(position).getDistance()) + " km");
     }
+
+    private void sendContactToServer(String phone) {
+        RequestParams params;
+        params = new RequestParams();
+        params.put("phone", phone);
+
+        Log.i("params deleteDelivery", params.toString());
+        BaseService.getHttpClient().post(Defines.URL_CALL, params, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+                // called when response HTTP status is "200 OK"
+                Log.i("JSON", new String(responseBody));
+                //parseJsonResult(new String(responseBody));
+                int result = Integer.valueOf(new String(responseBody));
+            }
+
+            @Override
+            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+                Log.i("JSON", new String(responseBody));
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+            }
+        });
+    }
+
     public void setOnItemClickListener(final onClickListener onClick)
     {
         this.onClick = onClick;

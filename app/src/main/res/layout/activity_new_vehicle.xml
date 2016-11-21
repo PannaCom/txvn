@@ -105,7 +105,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Họ tên"
+                                android:text="@string/fullname"
                                 android:textSize="13sp" />
 
                             <EditText
@@ -148,7 +148,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Số điện thoại"
+                                android:text="@string/phone"
                                 android:textSize="13sp" />
 
                             <EditText
@@ -201,11 +201,13 @@
                                 android:layout_height="wrap_content"
                                 android:background="@null"
                                 android:singleLine="true"
+                                android:imeOptions="actionDone"
                                 android:textSize="16sp"
                                 android:textColor="@color/colorPrimaryDark"
                                 android:id="@+id/txt_bien_so" />
                         </LinearLayout>
                     </FrameLayout>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -232,7 +234,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Hãng xe"
+                                android:text="@string/car_made"
                                 android:textSize="13sp" />
 
                             <TextView
@@ -281,21 +283,25 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Tên xe"
+                                android:text="@string/car_model"
                                 android:textSize="13sp" />
 
-                            <AutoCompleteTextView
+                            <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@null"
-                                android:singleLine="true"
                                 android:textSize="16sp"
-                                android:hint="VD : Lexus RX 350 2017 "
                                 android:textColor="@color/colorPrimaryDark"
-                                android:imeOptions="actionDone"
+                                android:singleLine="true"
                                 android:id="@+id/txt_car_name" />
 
                         </LinearLayout>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="right|center_vertical"
+                            android:layout_marginRight="10dp"
+                            android:src="@mipmap/select" />
                     </FrameLayout>
                     <TextView
                         android:layout_width="wrap_content"
@@ -321,7 +327,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Số chỗ"
+                                android:text="@string/car_size"
                                 android:textSize="13sp" />
                             <TextView
                                 android:layout_width="match_parent"
@@ -365,7 +371,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Loại xe"
+                                android:text="@string/car_type"
                                 android:textSize="13sp" />
                             <TextView
                                 android:layout_width="match_parent"
@@ -410,7 +416,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Năm sản xuất"
+                                android:text="@string/car_year"
                                 android:textSize="13sp" />
                             <TextView
                                 android:layout_width="match_parent"
@@ -457,7 +463,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Bảng giá"
+                                android:text="@string/price"
                                 android:textSize="13sp" />
 
                             <LinearLayout
