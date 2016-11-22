@@ -91,6 +91,7 @@ public class ListVehicleActivity extends AppCompatActivity {
     private RecyclerView lvCarTypes;
     private CarTypesAdapter adapterImg;
     private ProgressDialog dialog;
+    private boolean isFiltered = false, isDrawerOpen = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -246,20 +247,24 @@ public class ListVehicleActivity extends AppCompatActivity {
 
 
     private void getDataSearch() {
-        //try {
-            /*JSONObject carObject = new JSONObject(preference.getKeySearch());
-            carMade       = carObject.getString("hangxe");
-            carName       = carObject.getString("tenxe");
-            carSize       = carObject.getString("socho");
-            carType       = carObject.getString("loaixe");*/
-            Defines.FilterInfor = new CarInforObject();
-            Defines.FilterInfor.setCarSize("Tất cả");
-            Defines.FilterInfor.setCarMade("Tất cả");
-            Defines.FilterInfor.setCarType("Tất cả");
-            Defines.FilterInfor.setCarModel("Tất cả");
-       /* } catch (JSONException e) {
-            e.printStackTrace();
-        }*/
+    //try {
+        /*JSONObject carObject = new JSONObject(preference.getKeySearch());
+        carMade       = carObject.getString("hangxe");
+        carName       = carObject.getString("tenxe");
+        carSize       = carObject.getString("socho");
+        carType       = carObject.getString("loaixe");*/
+        Defines.FilterInfor = new CarInforObject();
+        Defines.FilterInfor.setCarSize("Tất cả");
+        Defines.FilterInfor.setCarMade("Tất cả");
+        Defines.FilterInfor.setCarType("Tất cả");
+        Defines.FilterInfor.setCarModel("Tất cả");
+
+        arrCarModel = new ArrayList<>();
+        arrCarModel.add("Tất cả");
+
+   /* } catch (JSONException e) {
+        e.printStackTrace();
+    }*/
     }
 
     private void setupTabIcons() {
@@ -340,6 +345,7 @@ public class ListVehicleActivity extends AppCompatActivity {
 
             @Override
             public void onDrawerOpened(View drawerView) {
+                isDrawerOpen = true;
                 prepareFilterData();
             }
 
@@ -366,9 +372,6 @@ public class ListVehicleActivity extends AppCompatActivity {
     private void prepareFilterData() {
 
         fillFilterData();
-        arrCarModel = new ArrayList<>();
-        arrCarModel.add("Tất cả");
-
         final ArrayAdapter<String> adapterName = new ArrayAdapter<>(this, R.layout.custom_spiner,arrCarModel);
         adapterName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         carModelSpinner.setAdapter(adapterName);
@@ -384,7 +387,10 @@ public class ListVehicleActivity extends AppCompatActivity {
 
             }
         });
-
+        for (int i = 0 ; i< arrCarModel.size(); i++){
+            if (arrCarModel.get(i).equals(Defines.FilterInfor.getCarModel()))
+                carModelSpinner.setSelection(i);
+        }
         ArrayAdapter<String> adapterCategory = new ArrayAdapter<>(this, R.layout.custom_spiner,arrCarMade);
         adapterCategory.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categorySpinner.setAdapter(adapterCategory);
@@ -394,9 +400,18 @@ public class ListVehicleActivity extends AppCompatActivity {
                 if (Defines.FilterInfor != null) {
                     Defines.SpinnerSelect.setCarMade(arrCarMade.get(index));
                     if (index >0) {
-                        carModelSpinner.setSelection(0);
                         requestCarName(arrCarMade.get(index), adapterName);
+                        boolean checkname = false;
+                        for (int i = 0; i < arrCarModel.size(); i++) {
+                            if (arrCarModel.get(i).equals(Defines.FilterInfor.getCarModel())) {
+                                checkname = true;
+                            }
+                        }
+                        if (!checkname)
+                            carModelSpinner.setSelection(0);
                     }else{
+                        if (isDrawerOpen)
+                            isDrawerOpen = false;
                         arrCarModel.clear();
                         arrCarModel.add("Tất cả");
                         adapterName.notifyDataSetChanged();
@@ -482,11 +497,17 @@ public class ListVehicleActivity extends AppCompatActivity {
                 mDrawerLayout.closeDrawer(Gravity.LEFT);
                 adapterImg.setSelectedPostion(Defines.SpinnerSelect.getCarType());
                 adapterImg.notifyDataSetChanged();
+                isFiltered = true;
             }
         });
     }
 
     private void requestCarName(String s, final ArrayAdapter<String> adapterName) {
+        if (isFiltered && isDrawerOpen)
+        {
+            isDrawerOpen = false;
+            return;
+        }
         arrCarModel.clear();
         arrCarModel.add("Tất cả");
         RequestParams params;
