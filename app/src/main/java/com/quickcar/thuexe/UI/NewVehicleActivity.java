@@ -344,8 +344,10 @@ public class NewVehicleActivity extends AppCompatActivity {
                     preference.saveLicense(txtBienSo.getText().toString());
                     preference.saveLogin();
                     preference.saveDriverId(result);
+                    preference.saveActive(true);
+                    preference.saveRegisterToken(false);
                     saveVehicleInfor();
-                    Intent intent = new Intent(mContext, ActiveAccountActivity.class);
+                    Intent intent = new Intent(mContext, ListPassengerActivity.class);
                     startActivity(intent);;
                     finish();
                 }else

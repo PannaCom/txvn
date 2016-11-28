@@ -15,6 +15,7 @@ import android.view.View;
 import com.quickcar.thuexe.Models.BusInfor;
 import com.quickcar.thuexe.Models.CarInforObject;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import java.util.Map;
  * Created by DatNT on 6/13/2016.
  */
 public class Utilites {
+    public static DecimalFormat format = new DecimalFormat("#.#");
     public static float convertDpToPixel(float dp, Context context){
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();

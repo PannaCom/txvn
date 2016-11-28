@@ -32,6 +32,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -100,8 +101,11 @@ public class MapCarActiveFragment extends Fragment implements OnMapReadyCallback
             params.put("car_size", "");
         else
             params.put("car_size", Defines.FilterInfor.getCarSize().substring(0,1));
-        params.put("lon", longitude);
-        params.put("lat", latitude);
+        DecimalFormat df = new DecimalFormat("#.######");
+        String lon = df.format(longitude).replace(",", ".");
+        String lat = df.format(latitude).replace(",", ".");
+        params.put("lon", lon);
+        params.put("lat", lat);
         params.put("order", Defines.FILTER_ORDER);
         Log.i("params deleteDelivery", params.toString());
         //swipeToRefresh.setRefreshing(true);

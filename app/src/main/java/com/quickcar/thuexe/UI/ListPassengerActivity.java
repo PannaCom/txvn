@@ -74,12 +74,12 @@ public class ListPassengerActivity extends AppCompatActivity implements OnMapRea
 
         mContext = this;
         preference = new SharePreference(this);
-        if (!checkExpireToken()) {
+     /*   if (!checkExpireToken()) {
             getCurrentLocation();
         }else{
             showDialogExpire();
-        }
-
+        }*/
+        getCurrentLocation();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(this);
@@ -385,8 +385,11 @@ public class ListPassengerActivity extends AppCompatActivity implements OnMapRea
         }
         RequestParams params;
         params = new RequestParams();
-        params.put("lon", longitude);
-        params.put("lat", latitude);
+        DecimalFormat df = new DecimalFormat("#.######");
+        String lon = df.format(longitude).replace(",", ".");
+        String lat = df.format(latitude).replace(",", ".");
+        params.put("lon", lon);
+        params.put("lat",  lat);
         params.put("car_number", preference.getLicense());
         params.put("phone", preference.getPhone());
         params.put("status", status);
@@ -422,7 +425,7 @@ public class ListPassengerActivity extends AppCompatActivity implements OnMapRea
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if (!checkExpireToken())
+        //if (!checkExpireToken())
             getCarAround();
     }
 
@@ -436,8 +439,11 @@ public class ListPassengerActivity extends AppCompatActivity implements OnMapRea
 
         RequestParams params;
         params = new RequestParams();
-        params.put("lon", longitude);
-        params.put("lat", latitude);
+        DecimalFormat df = new DecimalFormat("#.######");
+        String lon = df.format(longitude).replace(",", ".");
+        String lat = df.format(latitude).replace(",", ".");
+        params.put("lon", lon);
+        params.put("lat",  lat);
         Log.i("params deleteDelivery", params.toString());
         BaseService.getHttpClient().post(Defines.URL_GET_AROUND, params, new AsyncHttpResponseHandler() {
 

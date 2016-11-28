@@ -88,13 +88,12 @@ public class ActiveCarAdapter extends RecyclerView.Adapter<ActiveCarAdapter.Vehi
         holder.txtCarType.setText(vehicles.get(position).getCarType());
         holder.txtCarSize.setText(vehicles.get(position).getCarSize()+ " chỗ");
         holder.txtPhone.setText(vehicles.get(position).getPhone());
-        holder.txtDistance.setText(vehicles.get(position).getDistance()+ "km");
         DecimalFormat df = new DecimalFormat("#.#");
 
         if ((int) vehicles.get(position).getDistance() == 0)
-            holder.txtDistance.setText(df.format(vehicles.get(position).getDistance()*1000) + " m");
+            holder.txtDistance.setText("cách "+df.format(vehicles.get(position).getDistance()*1000) + " m");
         else
-            holder.txtDistance.setText(df.format(vehicles.get(position).getDistance()) + " km");
+            holder.txtDistance.setText("cách "+df.format(vehicles.get(position).getDistance()) + " km");
     }
 
     private void sendContactToServer(String phone) {

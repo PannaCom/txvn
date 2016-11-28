@@ -52,7 +52,10 @@ public class CarTypesAdapter extends RecyclerView.Adapter<CarTypesAdapter.Vehicl
 
     @Override
     public void onBindViewHolder(final VehicleViewHolder holder, final int position) {
-        holder.imgCarTypes.setImageResource(carTypeIcon[position]);
+        if (position < carTypeIcon.length)
+            holder.imgCarTypes.setImageResource(carTypeIcon[position]);
+        else
+            holder.imgCarTypes.setImageResource(R.mipmap.general_car);
         if (carTypes.get(position).equals(selectedPoss)) {
             holder.cardview.setBackgroundResource(R.drawable.click_car_type);
             cars.getLayoutManager().scrollToPosition(position);
