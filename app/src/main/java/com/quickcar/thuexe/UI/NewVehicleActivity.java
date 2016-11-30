@@ -345,7 +345,6 @@ public class NewVehicleActivity extends AppCompatActivity {
                     preference.saveLogin();
                     preference.saveDriverId(result);
                     preference.saveActive(true);
-                    preference.saveRegisterToken(false);
                     saveVehicleInfor();
                     Intent intent = new Intent(mContext, ListPassengerActivity.class);
                     startActivity(intent);;

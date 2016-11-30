@@ -171,11 +171,9 @@ public class ListPassengerActivity extends AppCompatActivity {
 
         RequestParams params;
         params = new RequestParams();
-        params.put("tobject", preference.getRole());
+        params.put("phone", preference.getPhone());
         params.put("regid",  token);
         params.put("os", 1);
-
-
         Log.i("params deleteDelivery", params.toString());
         BaseService.getHttpClient().post(Defines.URL_REGISTER_TOKEN, params, new AsyncHttpResponseHandler() {
 

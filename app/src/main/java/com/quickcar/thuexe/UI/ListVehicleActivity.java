@@ -177,14 +177,14 @@ public class ListVehicleActivity extends AppCompatActivity {
                 arrCarType = types;
                 arrCarMade.add(0,"Tất cả");
                 arrCarType.add(0,"Tất cả");
-                if (!preference.getRegisterToken()) {
+                /*if (!preference.getRegisterToken()) {
                     dialog = new ProgressDialog(mContext);
                     dialog.setMessage("Đang tải dữ liệu");
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.setCancelable(false);
                     dialog.show();
                     registerToken(preference.getToken());
-                }
+                }*/
                 adapterImg = new CarTypesAdapter(mContext, arrCarType, lvCarTypes);
                 lvCarTypes.setAdapter(adapterImg);
                 lvCarTypes.setHasFixedSize(true);
@@ -215,7 +215,7 @@ public class ListVehicleActivity extends AppCompatActivity {
 
     }
 
-    private void registerToken(String token) {
+    /*private void registerToken(String token) {
 
         RequestParams params;
         params = new RequestParams();
@@ -252,7 +252,7 @@ public class ListVehicleActivity extends AppCompatActivity {
             public void onRetry(int retryNo) {
             }
         });
-    }
+    }*/
     private void showDialogShareSocial() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");

@@ -24,7 +24,7 @@ public class Defines {
     public static  final String     URL_GET_CAR_MADE            = HOSTNAME + "Api/getCarMadeList";
     public static  final String     URL_GET_CAR_TYPE            = HOSTNAME + "Api/getAllCarTypeList";
     public static  final String     URL_REGISTER_VEHICLE        = HOSTNAME + "Api/register";
-    public static  final String     URL_REGISTER_TOKEN          = HOSTNAME + "Api/PostRegId";
+    public static  final String     URL_REGISTER_TOKEN          = HOSTNAME + "Api/regIdUser";
     public static  final String     URL_CALL                    = HOSTNAME + "Api/call";
     public static  final String     URL_BOOKING                 = HOSTNAME + "Api/booking";
     public static  final String     URL_GET_HIRE_TYPE           = HOSTNAME + "Api/getCarHireType";
