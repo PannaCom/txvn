@@ -26,6 +26,13 @@ public class Defines {
     public static  final String     URL_REGISTER_VEHICLE        = HOSTNAME + "Api/register";
     public static  final String     URL_REGISTER_TOKEN          = HOSTNAME + "Api/PostRegId";
     public static  final String     URL_CALL                    = HOSTNAME + "Api/call";
+    public static  final String     URL_BOOKING                 = HOSTNAME + "Api/booking";
+    public static  final String     URL_GET_HIRE_TYPE           = HOSTNAME + "Api/getCarHireType";
+    public static  final String     URL_GET_CAR_SIZE            = HOSTNAME + "Api/getCarSize";
+    public static  final String     URL_GET_BOOKING             = HOSTNAME + "Api/getBooking";
+    public static  final String     URL_GET_BOOKING_BY_PHONE    = HOSTNAME + "Api/getbookingbyphone";
+    public static  final String     URL_LOG_DRIVER              = HOSTNAME + "Api/logDriver";
+    public static  final String     URL_UPDATE_BOOKING          = HOSTNAME + "Api/updateBooking";
 
     public static  final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 123;
     public static  final int REQUEST_CODE_LOCATION_PERMISSIONS = 234;

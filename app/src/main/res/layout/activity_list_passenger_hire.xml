@@ -13,6 +13,7 @@
             android:layout_height="60dp"
             android:background="#029ca0"
             android:id="@+id/toolbar">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -29,27 +30,36 @@
                 android:paddingLeft="10dp"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/img_back" />
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/all"
-                android:layout_marginRight="10dp"
-                android:layout_gravity="center_vertical|right"
-                android:id="@+id/img_menu" />
         </FrameLayout>
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabBackground="@color/yellow_1"
-            app:tabMode="fixed"
-            app:tabGravity="fill"  />
+
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        android:layout_marginTop="60dp">
+        <android.support.v4.widget.SwipeRefreshLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/swipe_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:id="@+id/vehicle_view"
+                />
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bạn chưa đặt chuyến xe nào"
+            android:textSize="18sp"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:id="@+id/txt_no_result" />
+    </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

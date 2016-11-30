@@ -28,6 +28,7 @@
         <activity android:name=".UI.ListPassengerActivity" />
         <activity android:name=".UI.NewVehicleActivity" />
         <activity android:name=".UI.EditOwnerActivity" />
+
         <service android:name=".Fcm.FirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -38,11 +39,16 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".UI.ActiveAccountActivity"></activity>
+        <activity android:name=".UI.ActiveAccountActivity" />
+        <activity android:name=".UI.SelectPassengerActionActivity" />
+        <activity android:name=".UI.BookingNowActivity" />
+        <activity android:name=".UI.GetInforPassengerActivity" />
+        <activity android:name=".UI.ListPassengerHireActivity"></activity>
     </application>
 
 </manifest>

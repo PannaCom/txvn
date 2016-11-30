@@ -15,6 +15,8 @@ import android.view.View;
 import com.quickcar.thuexe.Models.BusInfor;
 import com.quickcar.thuexe.Models.CarInforObject;
 
+import org.joda.time.DateTime;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -174,5 +176,20 @@ public class Utilites {
             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
             | View.SYSTEM_UI_FLAG_FULLSCREEN
             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+    public static String convertTime(DateTime current){
+        String dateFrom = current.getDayOfMonth()+"/"+current.getMonthOfYear()+"/"+current.getYear();
+        dateFrom+=" ";
 
+        if (current.getHourOfDay()>=10)
+            dateFrom+=current.getHourOfDay();
+        else
+            dateFrom+="0"+current.getHourOfDay();
+        dateFrom+=":";
+        if (current.getMinuteOfHour()>=10)
+            dateFrom+=current.getMinuteOfHour();
+        else
+            dateFrom+="0"+current.getMinuteOfHour();
+
+        return dateFrom;
+    }
 }

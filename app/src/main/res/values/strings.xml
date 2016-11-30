@@ -78,4 +78,7 @@
     <string name="car_year">Năm sản xuất</string>
     <string name="price">Bảng giá (Đồng/Km)</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

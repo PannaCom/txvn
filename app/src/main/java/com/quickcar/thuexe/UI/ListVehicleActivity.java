@@ -74,7 +74,7 @@ public class ListVehicleActivity extends AppCompatActivity {
             R.mipmap.maps
     };
     private DrawerLayout mDrawerLayout;
-    private FloatingActionButton buttonFilter;
+    private FloatingActionButton buttonFilter, btnBookNow;
     private Context mContext;
     private RelativeLayout mDrawer;
     private OnDataPass dataPasser;
@@ -103,6 +103,7 @@ public class ListVehicleActivity extends AppCompatActivity {
         mDrawerLayout               =   (DrawerLayout)          findViewById(R.id.drawer_layout);
         mDrawer                     =   (RelativeLayout)        findViewById(R.id.drawer);
         buttonFilter                =   (FloatingActionButton)  findViewById(R.id.btn_filter);
+        btnBookNow                  =   (FloatingActionButton)  findViewById(R.id.btn_book_now);
 
         categorySpinner             =   (Spinner)               findViewById(R.id.spinner_category);
         carModelSpinner             =   (Spinner)               findViewById(R.id.spinner_car_name);
@@ -113,6 +114,7 @@ public class ListVehicleActivity extends AppCompatActivity {
         lvCarTypes                  =   (RecyclerView)          findViewById(R.id.lv_car_type);
 
         buttonFilter.setOnClickListener(filter_click_listener);
+        btnBookNow.setOnClickListener(booking_now_click_listener);
         //Bundle extras = getIntent().getExtras();
 
         setupViewPager(viewPager);
@@ -149,7 +151,22 @@ public class ListVehicleActivity extends AppCompatActivity {
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                if (doubleBackToExitPressedOnce) {
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(mContext, getResources().getString(R.string.notice_close_app), Toast.LENGTH_SHORT).show();
+                    doubleBackToExitPressedOnce = true;
+                    new Handler().postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            doubleBackToExitPressedOnce=false;
+                        }
+                    }, 2000);
+                }
             }
         });
         getDataSearch();
@@ -551,6 +568,19 @@ public class ListVehicleActivity extends AppCompatActivity {
         public void onClick(View v) {
             mDrawerLayout.openDrawer(Gravity.LEFT);
             //buttonFilter.setImageResource(R.drawable.filter);
+        }
+    };
+
+    private View.OnClickListener booking_now_click_listener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (preference.getName().equals("")) {
+                Intent intent = new Intent(mContext, GetInforPassengerActivity.class);
+                startActivity(intent);
+            }else{
+                Intent intent = new Intent(mContext, BookingNowActivity.class);
+                startActivity(intent);
+            }
         }
     };
     // Container Activity must implement this interface

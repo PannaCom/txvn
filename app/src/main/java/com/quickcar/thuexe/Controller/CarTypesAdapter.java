@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public class CarTypesAdapter extends RecyclerView.Adapter<CarTypesAdapter.VehicleViewHolder> {
 
     private ArrayList<String> carTypes;
-    private Integer[] carTypeIcon = {R.mipmap.all_car, R.mipmap.free_car, R.mipmap.taxi,R.mipmap.wedding_car,R.mipmap.contract_car,R.mipmap.self_driver,R.mipmap.delivery_car,R.mipmap.container,R.mipmap.coach};
+   // private Integer[] carTypeIcon = {R.mipmap.all_car, R.mipmap.free_car, R.mipmap.taxi,R.mipmap.wedding_car,R.mipmap.contract_car,R.mipmap.self_driver,R.mipmap.delivery_car,R.mipmap.container,R.mipmap.coach};
     private Context mContext;
     private onClickListener onClick;
     private String selectedPoss = "Tất cả";
@@ -52,8 +52,24 @@ public class CarTypesAdapter extends RecyclerView.Adapter<CarTypesAdapter.Vehicl
 
     @Override
     public void onBindViewHolder(final VehicleViewHolder holder, final int position) {
-        if (position < carTypeIcon.length)
-            holder.imgCarTypes.setImageResource(carTypeIcon[position]);
+        if (carTypes.get(position).equals("xe tự lái"))
+            holder.imgCarTypes.setImageResource(R.mipmap.self_driver);
+        else if (carTypes.get(position).equals("xe cưới"))
+            holder.imgCarTypes.setImageResource(R.mipmap.wedding_car);
+        else if (carTypes.get(position).equals("xe tải chở hàng"))
+            holder.imgCarTypes.setImageResource(R.mipmap.delivery_car);
+        else if (carTypes.get(position).equals("xe hợp đồng"))
+            holder.imgCarTypes.setImageResource(R.mipmap.contract_car);
+        else if (carTypes.get(position).equals("xe công trình"))
+            holder.imgCarTypes.setImageResource(R.mipmap.container);
+        else if (carTypes.get(position).equals("xe khách"))
+            holder.imgCarTypes.setImageResource(R.mipmap.coach);
+        else if (carTypes.get(position).equals("xe taxi"))
+            holder.imgCarTypes.setImageResource(R.mipmap.taxi);
+        else if (carTypes.get(position).equals("xe tự do"))
+            holder.imgCarTypes.setImageResource(R.mipmap.free_car);
+        else if (carTypes.get(position).equals("Tất cả"))
+            holder.imgCarTypes.setImageResource(R.mipmap.all_car);
         else
             holder.imgCarTypes.setImageResource(R.mipmap.general_car);
         if (carTypes.get(position).equals(selectedPoss)) {
