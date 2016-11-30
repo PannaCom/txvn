@@ -19,6 +19,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -66,13 +68,14 @@ import java.util.List;
 public class ListPassengerActivity extends AppCompatActivity {
 
     private SharePreference preference;
-    private ImageView imgMenu;
+    private ImageView imgMenu, btnBack;
     private Context mContext;
     private ProgressDialog dialog;
     private OnDataMap dataMap;
     private OnDataPass dataPasser;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private boolean doubleBackToExitPressedOnce = false;
     private int[] tabIcons = {
             R.mipmap.maps,
             R.mipmap.roster
@@ -84,6 +87,28 @@ public class ListPassengerActivity extends AppCompatActivity {
         preference = new SharePreference(this);
         mContext = this;
         imgMenu     = (ImageView)   findViewById(R.id.img_menu);
+        btnBack     =  (ImageView)  findViewById(R.id.img_back);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (doubleBackToExitPressedOnce) {
+                    Intent intent = new Intent(Intent.ACTION_MAIN);
+                    intent.addCategory(Intent.CATEGORY_HOME);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }else {
+                    Toast.makeText(mContext, getResources().getString(R.string.notice_close_app), Toast.LENGTH_SHORT).show();
+                    doubleBackToExitPressedOnce = true;
+                    new Handler().postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            doubleBackToExitPressedOnce=false;
+                        }
+                    }, 2000);
+                }
+            }
+        });
         imgMenu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -129,10 +154,9 @@ public class ListPassengerActivity extends AppCompatActivity {
     }
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        Fragment carList = new CarListFragment();
-
-        adapter.addFrag(new ListCarAroundFragment(), "Xe hoạt động");
         adapter.addFrag(new ListPassengerBookingFragment(), "Hành khách");
+        adapter.addFrag(new ListCarAroundFragment(), "Xe hoạt động");
+
         viewPager.setAdapter(adapter);
     }
 
@@ -296,6 +320,32 @@ public class ListPassengerActivity extends AppCompatActivity {
         public void onDataPass();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            if (doubleBackToExitPressedOnce) {
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }else {
+                Toast.makeText(mContext, getResources().getString(R.string.notice_close_app), Toast.LENGTH_SHORT).show();
+                this.doubleBackToExitPressedOnce = true;
+                new Handler().postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce=false;
+                    }
+                }, 2000);
+            }
+            return true;
+        } else if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 1) {
+            finish();
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
 
 
 

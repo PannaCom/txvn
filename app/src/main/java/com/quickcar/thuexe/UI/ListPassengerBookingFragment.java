@@ -179,8 +179,11 @@ public class ListPassengerBookingFragment extends Fragment {
                         //swipeToRefresh.setRefreshing(false);
 
                     }else{
+                        passengers = new ArrayList<>();
+                        adapter = new PassengerBookingAdapter(getActivity(), passengers);
+                        vehicleView.setAdapter(adapter);
                         txtNoResult.setVisibility(View.VISIBLE);
-                        txtNoResult.setText("Không có xe nào cho tuyến này");
+                        txtNoResult.setText("Không có khách nào gọi xe");
                         //swipeToRefresh.setRefreshing(false);
                     }
                     dialog.dismiss();

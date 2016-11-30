@@ -317,7 +317,8 @@ public class NewVehicleActivity extends AppCompatActivity {
         params.put("car_type", txtType.getText().toString());
         params.put("car_year", txtProduceYear.getText().toString());
         params.put("car_price", price);
-
+        params.put("os", 1);
+        params.put("regId", preference.getToken());
         Log.i("params deleteDelivery", params.toString());
         dialog = new ProgressDialog(this);
         dialog.setMessage("Đang tải dữ liệu");
