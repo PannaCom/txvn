@@ -24,7 +24,7 @@ public class GetAllCarData {
     private onDataReceived onReceived;
     private Context mContext;
     private ProgressDialog dialog;
-    private ArrayList<String> aCategory, aVehicleType;
+    private ArrayList<String> aCategory, aVehicleType, aCarSize;
     public GetAllCarData(Context mContext, onDataReceived onDataReceived){
         this.mContext = mContext;
         this.onReceived = onDataReceived;
@@ -54,6 +54,46 @@ public class GetAllCarData {
                         JSONObject result = arrayresult.getJSONObject(i);
                         String name = result.getString("name");
                         aCategory.add(name);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                getAllCarSize();
+
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
+                Log.i("JSON", new String(responseBody));
+                Toast.makeText(mContext, mContext.getString(R.string.check_network), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+                Toast.makeText(mContext, mContext.getString(R.string.check_network), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    private void getAllCarSize(){
+        aCarSize = new ArrayList<>();
+        BaseService.getHttpClient().get(Defines.URL_GET_CAR_SIZE, new AsyncHttpResponseHandler() {
+
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody) {
+                // called when response HTTP status is "200 OK"
+                Log.i("JSON", new String(responseBody));
+                try {
+                    JSONArray arrayresult = new JSONArray(new String(responseBody));
+                    for (int i = 0; i < arrayresult.length(); i++) {
+                        JSONObject result = arrayresult.getJSONObject(i);
+                        String name = result.getString("name");
+                        aCarSize.add(name);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -99,7 +139,7 @@ public class GetAllCarData {
                     e.printStackTrace();
                 }
                 if (onReceived != null)
-                    onReceived.onReceived(aCategory, aVehicleType);
+                    onReceived.onReceived(aCategory, aVehicleType, aCarSize);
                 /*ArrayAdapter<String> adapterProvinceFrom = new ArrayAdapter<>(mContext,android.R.layout.simple_list_item_1, aVehicleType);
                 txtCarName.setAdapter(adapterProvinceFrom);
                 txtCarName.setThreshold(1);*/
@@ -120,6 +160,6 @@ public class GetAllCarData {
     }
 
     public interface onDataReceived{
-        public void onReceived(ArrayList<String> categories, ArrayList<String> types);
+        public void onReceived(ArrayList<String> categories, ArrayList<String> types, ArrayList<String> size);
     }
 }

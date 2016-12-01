@@ -172,19 +172,22 @@ public class ListVehicleActivity extends AppCompatActivity {
         getDataSearch();
         GetAllCarData carData = new GetAllCarData(this, new GetAllCarData.onDataReceived() {
             @Override
-            public void onReceived(ArrayList<String> categories, ArrayList<String> types) {
+            public void onReceived(ArrayList<String> categories, ArrayList<String> types, ArrayList<String> size) {
                 arrCarMade = categories;
                 arrCarType = types;
                 arrCarMade.add(0,"Tất cả");
                 arrCarType.add(0,"Tất cả");
-                /*if (!preference.getRegisterToken()) {
-                    dialog = new ProgressDialog(mContext);
-                    dialog.setMessage("Đang tải dữ liệu");
-                    dialog.setCanceledOnTouchOutside(false);
-                    dialog.setCancelable(false);
-                    dialog.show();
-                    registerToken(preference.getToken());
-                }*/
+                arrCarSize = new ArrayList<>();
+                arrCarSize.add("Tất cả");
+                arrCarSize = new ArrayList<>();
+                for (String item : size) {
+                    if (item.equals("4")){
+                        arrCarSize.add(item + " chỗ(giá siêu rẻ, không cốp)");
+                    }else  if (item.equals("5")){
+                        arrCarSize.add(item + " chỗ(có cốp)");
+                    }else
+                        arrCarSize.add(item + " chỗ");
+                }
                 adapterImg = new CarTypesAdapter(mContext, arrCarType, lvCarTypes);
                 lvCarTypes.setAdapter(adapterImg);
                 lvCarTypes.setHasFixedSize(true);
@@ -377,18 +380,7 @@ public class ListVehicleActivity extends AppCompatActivity {
             }
         });
     }
-    private void fillFilterData(){
-
-        // car size
-
-        arrCarSize = new ArrayList<>();
-        arrCarSize.add("Tất cả");
-        for (int i = 0 ; i< getResources().getStringArray(R.array.size_array).length; i++)
-            arrCarSize.add(getResources().getStringArray(R.array.size_array)[i]);
-    }
     private void prepareFilterData() {
-
-        fillFilterData();
         final ArrayAdapter<String> adapterName = new ArrayAdapter<>(this, R.layout.custom_spiner,arrCarModel);
         adapterName.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         carModelSpinner.setAdapter(adapterName);

@@ -77,8 +77,9 @@ public class ListPassengerActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private boolean doubleBackToExitPressedOnce = false;
     private int[] tabIcons = {
-            R.mipmap.maps,
-            R.mipmap.roster
+            R.mipmap.roster,
+            R.mipmap.maps
+
     };
     @Override
     protected void onCreate(Bundle savedInstanceState) {

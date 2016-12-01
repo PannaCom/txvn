@@ -46,7 +46,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class EditOwnerActivity extends AppCompatActivity {
-    private ArrayList<String> aCategory, placeFrom, placeTo, aTimes, aReceive, aVehicleType, aName;
+    private ArrayList<String> aCategory, placeFrom, placeTo, aTimes, aReceive, aVehicleType, aName, aCarSize;
     private FrameLayout layoutBienSo, layoutCategory, layoutName, layoutPhone, layoutPrice,layoutCarName,layoutType, layoutSize, layoutProduceYear;
     private ImageView imgBack;
     private EditText txtName, txtTelephone, txtBienSo;
@@ -185,9 +185,18 @@ public class EditOwnerActivity extends AppCompatActivity {
         });
         GetAllCarData carData = new GetAllCarData(this, new GetAllCarData.onDataReceived() {
             @Override
-            public void onReceived(ArrayList<String> categories, ArrayList<String> types) {
+            public void onReceived(ArrayList<String> categories, ArrayList<String> types, ArrayList<String> size) {
                 aCategory = categories;
                 aVehicleType = types;
+                aCarSize = new ArrayList<>();
+                for (String item : size) {
+                    if (item.equals("4")){
+                        aCarSize.add(item + " chỗ(giá siêu rẻ, không cốp)");
+                    }else  if (item.equals("5")){
+                        aCarSize.add(item + " chỗ(có cốp)");
+                    }else
+                        aCarSize.add(item + " chỗ");
+                }
             }
         });
     }
@@ -444,10 +453,10 @@ public class EditOwnerActivity extends AppCompatActivity {
         public void onClick(View v) {
             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
             builder.setTitle("Chọn số chỗ")
-                    .setSingleChoiceItems(R.array.size_array,-1, new DialogInterface.OnClickListener() {
+                    .setSingleChoiceItems(aCarSize.toArray(new CharSequence[aCarSize.size()]),-1, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String size = mContext.getResources().getStringArray(R.array.size_array)[which];
+                            String size = aCarSize.get(which);
                             txtSize.setText(size);
                             dialog.dismiss();
                         }

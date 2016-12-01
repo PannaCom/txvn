@@ -176,7 +176,7 @@ public class CarListFragment extends Fragment {
         if (Defines.FilterInfor.getCarSize().equals("Tất cả"))
             params.put("car_size", "");
         else
-            params.put("car_size", Defines.FilterInfor.getCarSize().substring(0,1));
+            params.put("car_size", Defines.FilterInfor.getCarSize().split(" ")[0]);
         DecimalFormat df = new DecimalFormat("#.######");
         String lon = df.format(longitude).replace(",", ".");
         String lat = df.format(latitude).replace(",", ".");
