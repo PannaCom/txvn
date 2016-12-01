@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -66,14 +67,24 @@ public class PassengerHireAdapter extends RecyclerView.Adapter<PassengerHireAdap
         else
             holder.txtCarSize.setText(vehicles.get(position).getCarSize()+" chỗ");
         if (vehicles.get(position).getStatus().equals("1")) {
-            holder.btnDelete.setImageResource(R.mipmap.complete);
+            holder.btnDelete.setVisibility(View.GONE);
+            holder.btnConfirm.setVisibility(View.GONE);
+            holder.imgComplete.setVisibility(View.VISIBLE);
             holder.layoutTitle.setBackgroundColor(Color.parseColor("#ff6e6e"));
         }
         else {
-            holder.btnDelete.setImageResource(R.mipmap.delete);
+            holder.imgComplete.setVisibility(View.GONE);
+            holder.btnDelete.setVisibility(View.VISIBLE);
+            holder.btnConfirm.setVisibility(View.VISIBLE);
             holder.layoutTitle.setBackgroundColor(Color.parseColor("#20afc3"));
 
             holder.btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deleteHire(vehicles.get(position).getId());
+                }
+            });
+            holder.btnConfirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     deleteHire(vehicles.get(position).getId());
@@ -105,9 +116,9 @@ public class PassengerHireAdapter extends RecyclerView.Adapter<PassengerHireAdap
                 if (result > 0 ) {
                     if (onClick != null)
                         onClick.onItemClick();
-                    Toast.makeText(mContext, "Hủy chuyến xe thành công", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Cập nhật chuyến xe thành công", Toast.LENGTH_SHORT).show();
                 } else
-                    Toast.makeText(mContext, "Hủy chuyến xe thất bại",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Cập nhật chuyến xe thất bại",Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -139,7 +150,9 @@ public class PassengerHireAdapter extends RecyclerView.Adapter<PassengerHireAdap
         TextView txtCarType;
         TextView txtCarSize;
         LinearLayout layoutTitle;
-        ImageView btnDelete;
+        Button btnDelete;
+        Button btnConfirm;
+        ImageView imgComplete;
         VehicleViewHolder(View itemView) {
             super(itemView);
             cardview            = (CardView)        itemView.findViewById(R.id.card_view);
@@ -151,7 +164,9 @@ public class PassengerHireAdapter extends RecyclerView.Adapter<PassengerHireAdap
             txtCarType          = (TextView)        itemView.findViewById(R.id.txt_vehicle_type);
             txtCarSize          = (TextView)        itemView.findViewById(R.id.txt_vehicle_size);
             layoutTitle         = (LinearLayout)    itemView.findViewById(R.id.layout_title);
-            btnDelete           = (ImageView)       itemView.findViewById(R.id.btn_delete);
+            btnDelete           = (Button)          itemView.findViewById(R.id.btn_delete);
+            btnConfirm          = (Button)          itemView.findViewById(R.id.btn_confirm);
+            imgComplete         = (ImageView)       itemView.findViewById(R.id.img_complete);
         }
 
     }

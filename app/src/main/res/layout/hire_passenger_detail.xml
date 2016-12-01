@@ -272,16 +272,36 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="67dp"
-                    android:layout_height="match_parent">
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|right">
 
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/click_delete"
+                        android:text="Hủy"
+                        android:layout_marginBottom="10dp"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:id="@+id/btn_delete" />
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@mipmap/delete"
-                        android:id="@+id/btn_delete"
-                        android:layout_weight="1" />
+                        android:src="@mipmap/complete"
+                        android:visibility="gone"
+                        android:id="@+id/img_complete"/>
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/click_delete"
+                        android:text="Thành công"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:textAllCaps="false"
+                        android:id="@+id/btn_confirm" />
                 </LinearLayout>
 
             </LinearLayout>

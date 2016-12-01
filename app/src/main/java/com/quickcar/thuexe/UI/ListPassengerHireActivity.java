@@ -98,6 +98,7 @@ public class ListPassengerHireActivity extends AppCompatActivity {
         dialog.setCancelable(false);
         dialog.show();
         vehicles = new ArrayList<>();
+        txtNoResult.setVisibility(View.GONE);
         BaseService.getHttpClient().post(Defines.URL_GET_BOOKING_BY_PHONE, params, new AsyncHttpResponseHandler() {
 
             @Override
