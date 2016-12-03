@@ -179,7 +179,6 @@ public class ListVehicleActivity extends AppCompatActivity {
                 arrCarType.add(0,"Tất cả");
                 arrCarSize = new ArrayList<>();
                 arrCarSize.add("Tất cả");
-                arrCarSize = new ArrayList<>();
                 for (String item : size) {
                     if (item.equals("4")){
                         arrCarSize.add(item + " chỗ(giá siêu rẻ, không cốp)");
