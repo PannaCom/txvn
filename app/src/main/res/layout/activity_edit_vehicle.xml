@@ -175,7 +175,176 @@
                         android:visibility="invisible"
                         android:textColor="@color/md_red_700"
                         android:id="@+id/txt_telephone_error" />
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@mipmap/btn_register"
+                        android:paddingBottom="5dp"
+                        android:paddingTop="5dp"
+                        android:paddingLeft="5dp"
+                        android:id="@+id/layout_pass">
 
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/password_current"
+                                android:textSize="13sp" />
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@null"
+                                android:singleLine="true"
+                                android:inputType="textPassword"
+                                android:ems="10"
+                                android:textSize="16sp"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:id="@+id/txt_password" />
+
+                        </LinearLayout>
+                    </FrameLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bạn chưa điền mật khẩu hiện tại"
+                        android:layout_gravity="left"
+                        android:layout_marginBottom="10dp"
+                        android:textSize="12sp"
+                        android:visibility="invisible"
+                        android:textColor="@color/md_red_700"
+                        android:id="@+id/txt_pass_error" />
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@mipmap/btn_register"
+                        android:paddingBottom="5dp"
+                        android:paddingTop="5dp"
+                        android:paddingLeft="5dp"
+                        android:id="@+id/layout_pass_new">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/password_new"
+                                android:textSize="13sp" />
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@null"
+                                android:singleLine="true"
+                                android:inputType="textPassword"
+                                android:ems="10"
+                                android:textSize="16sp"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:id="@+id/txt_password_new" />
+
+                        </LinearLayout>
+                    </FrameLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bạn chưa điền mật khẩu mới"
+                        android:layout_gravity="left"
+                        android:layout_marginBottom="10dp"
+                        android:textSize="12sp"
+                        android:visibility="invisible"
+                        android:textColor="@color/md_red_700"
+                        android:id="@+id/txt_pass_new_error" />
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@mipmap/btn_register"
+                        android:paddingBottom="5dp"
+                        android:paddingTop="5dp"
+                        android:paddingLeft="5dp"
+                        android:id="@+id/layout_email">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/email"
+                                android:textSize="13sp" />
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@null"
+                                android:singleLine="true"
+                                android:inputType="textEmailAddress"
+                                android:ems="10"
+                                android:textSize="16sp"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:id="@+id/txt_email" />
+
+                        </LinearLayout>
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bạn chưa điền email"
+                        android:layout_gravity="left"
+                        android:layout_marginBottom="10dp"
+                        android:textSize="12sp"
+                        android:visibility="invisible"
+                        android:textColor="@color/md_red_700"
+                        android:id="@+id/txt_email_error" />
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@mipmap/btn_register"
+                        android:paddingBottom="5dp"
+                        android:paddingTop="5dp"
+                        android:paddingLeft="5dp"
+                        android:id="@+id/layout_address">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Địa chỉ"
+                                android:textSize="13sp" />
+
+                            <AutoCompleteTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@null"
+                                android:imeOptions="actionDone"
+                                android:textSize="16sp"
+                                android:textColor="@color/colorPrimaryDark"
+                                android:id="@+id/txt_address" />
+                        </LinearLayout>
+                    </FrameLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bạn chưa điền biển số xe"
+                        android:layout_gravity="left"
+                        android:layout_marginBottom="10dp"
+                        android:textSize="12sp"
+                        android:visibility="invisible"
+                        android:textColor="@color/md_red_700"
+                        android:id="@+id/txt_address_error" />
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

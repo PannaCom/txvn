@@ -1,5 +1,6 @@
 package com.quickcar.thuexe.UI;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -7,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
@@ -19,6 +22,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -29,13 +33,24 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.quickcar.thuexe.Controller.PlaceArrayAdapter;
 import com.quickcar.thuexe.R;
 import com.quickcar.thuexe.Utilities.BaseService;
 import com.quickcar.thuexe.Utilities.Defines;
 import com.quickcar.thuexe.Utilities.GetAllCarData;
 import com.quickcar.thuexe.Utilities.SharePreference;
+import com.quickcar.thuexe.Utilities.Utilites;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,26 +60,38 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class EditOwnerActivity extends AppCompatActivity {
+public class EditOwnerActivity extends AppCompatActivity implements  GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks{
     private ArrayList<String> aCategory, placeFrom, placeTo, aTimes, aReceive, aVehicleType, aName, aCarSize;
     private FrameLayout layoutBienSo, layoutCategory, layoutName, layoutPhone, layoutPrice,layoutCarName,layoutType, layoutSize, layoutProduceYear;
     private ImageView imgBack;
-    private EditText txtName, txtTelephone, txtBienSo;
+    private EditText txtName, txtTelephone, txtBienSo, txtNewPass, txtOldPass, txtEmail;
     private TextView txtType, txtCategory, txtSize, txtProduceYear,txtPrice,txtCarName;
-    private TextView errBienSo, errCategory, errName, errPhone, errPrice,errCarName,errType, errSize, errProduceYear;;
+    private TextView errBienSo, errCategory, errName, errPhone, errPrice,errCarName,errType, errSize, errProduceYear, errOldPass, errNewPass, errEmail, errAddress;
     private ProgressDialog dialog;
     private FrameLayout toolbar;
     private Context mContext;
     private Button btnRegister;
     private int carPossition = 0;
     private SharePreference preference;
+    private LatLng latLng;
     private int price;
+    private String currentPass ="";
+    private static final LatLngBounds BOUNDS_MOUNTAIN_VIEW = new LatLngBounds(new LatLng(8.412730, 102.144410), new LatLng(23.393395, 109.468975));
+    private AutoCompleteTextView txtAddress;
+    private GoogleApiClient mGoogleApiClient;
+    private PlaceArrayAdapter mPlaceArrayAdapter;
+    private static final int GOOGLE_API_CLIENT_ID = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_vehicle);
         mContext = this;
         preference = new SharePreference(this);
+        mGoogleApiClient = new GoogleApiClient.Builder(EditOwnerActivity.this)
+                .addApi(Places.GEO_DATA_API)
+                .enableAutoManage(this, GOOGLE_API_CLIENT_ID, this)
+                .addConnectionCallbacks(this)
+                .build();
         initComponents();
         getCarInfor();
         /*for (int i=0; i< Defines.CarMade.length;i++)
@@ -88,6 +115,12 @@ public class EditOwnerActivity extends AppCompatActivity {
             String loaixe       = carObject.getString("loaixe");
             String namxe        = carObject.getString("namxe");
             price               = carObject.getInt("gia");
+            String email        = carObject.getString("email");
+            String address      = carObject.getString("diachi");
+            currentPass         = carObject.getString("pass");
+            double lon          = carObject.getDouble("lon");
+            double lat          = carObject.getDouble("lat");
+            latLng = new LatLng(lat,lon);
 
             txtName.setText(hoten);
             txtTelephone.setText(sodienthoai);
@@ -97,6 +130,9 @@ public class EditOwnerActivity extends AppCompatActivity {
             txtSize.setText(socho);
             txtType.setText(loaixe);
             txtProduceYear.setText(namxe);
+            txtEmail.setText(email);
+            txtAddress.setText(address);
+
             if (price== -1) {
                 txtPrice.setText("Thỏa thuận");
             }else {
@@ -129,6 +165,10 @@ public class EditOwnerActivity extends AppCompatActivity {
 
         txtName             = (EditText)                findViewById(R.id.txt_name);
         txtTelephone        = (EditText)                findViewById(R.id.txt_telephone);
+        txtOldPass          = (EditText)                findViewById(R.id.txt_password);
+        txtNewPass          = (EditText)                findViewById(R.id.txt_password_new);
+        txtEmail            = (EditText)                findViewById(R.id.txt_email);
+        txtAddress          = (AutoCompleteTextView)    findViewById(R.id.txt_address);
         txtBienSo           = (EditText)                findViewById(R.id.txt_bien_so);
         txtPrice            = (TextView)                findViewById(R.id.edt_price);
 
@@ -143,6 +183,10 @@ public class EditOwnerActivity extends AppCompatActivity {
         errPhone            = (TextView)             findViewById(R.id.txt_telephone_error);
         errBienSo           = (TextView)             findViewById(R.id.txt_bien_so_error);
         errCategory         = (TextView)             findViewById(R.id.txt_category_error);
+        errOldPass          = (TextView)             findViewById(R.id.txt_pass_error);
+        errNewPass          = (TextView)             findViewById(R.id.txt_pass_new_error);
+        errEmail            = (TextView)             findViewById(R.id.txt_email);
+        errAddress          = (TextView)             findViewById(R.id.txt_address);
         errCarName          = (TextView)             findViewById(R.id.txt_car_name_error);
         errSize             = (TextView)             findViewById(R.id.txt_size_error);
         errType             = (TextView)             findViewById(R.id.txt_vehicle_type_error);
@@ -154,7 +198,10 @@ public class EditOwnerActivity extends AppCompatActivity {
 
 
 
-
+        mPlaceArrayAdapter = new PlaceArrayAdapter(this,BOUNDS_MOUNTAIN_VIEW, null);
+        txtAddress.setThreshold(1);
+        txtAddress.setOnItemClickListener(mAutocompleteClickListener);
+        txtAddress.setAdapter(mPlaceArrayAdapter);
 
         layoutName.setOnClickListener(click_to_name_listener);
         layoutPhone.setOnClickListener(click_to_phone_listener);
@@ -200,6 +247,42 @@ public class EditOwnerActivity extends AppCompatActivity {
             }
         });
     }
+    private AdapterView.OnItemClickListener mAutocompleteClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            hideSoftKeyboard((Activity) mContext);
+            final PlaceArrayAdapter.PlaceAutocomplete item = mPlaceArrayAdapter.getItem(position);
+            final String placeId = String.valueOf(item.placeId);
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi.getPlaceById(mGoogleApiClient, placeId);
+            placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
+            //Log.i(LOG_TAG, "Fetching details for ID: " + item.placeId);
+        }
+    };
+    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback = new ResultCallback<PlaceBuffer>() {
+        @Override
+        public void onResult(PlaceBuffer places) {
+            if (!places.getStatus().isSuccess()) {
+                //Log.e(LOG_TAG, "Place query did not complete. Error: " + places.getStatus().toString());
+                return;
+            }
+            // Selecting the first object buffer.
+            final Place place = places.get(0);
+            CharSequence attributions = places.getAttributions();
+            latLng = place.getLatLng();
+            txtAddress.setSelection(0);
+
+            txtAddress.setFocusable(false);
+            txtAddress.setFocusableInTouchMode(false);
+
+        }
+    };
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
+    }
     private void showDialogCarMade() {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setTitle("Thông báo")
@@ -239,6 +322,28 @@ public class EditOwnerActivity extends AppCompatActivity {
             errPhone.setVisibility(View.VISIBLE);
             return true;
         }
+
+        if (txtOldPass.getText().toString().equals("")|| txtOldPass.getText().toString() == null){
+            requestFocus(txtOldPass);
+            errOldPass.setVisibility(View.VISIBLE);
+            return true;
+        }
+        if (txtNewPass.getText().toString().equals("")|| txtNewPass.getText().toString() == null){
+            requestFocus(txtNewPass);
+            errNewPass.setVisibility(View.VISIBLE);
+            return true;
+        }
+        if (txtEmail.getText().toString().equals("")|| txtEmail.getText().toString() == null){
+            requestFocus(txtEmail);
+            errEmail.setVisibility(View.VISIBLE);
+            return true;
+        }
+        if (txtAddress.getText().toString().equals("")|| txtAddress.getText().toString() == null){
+            requestFocus(txtAddress);
+            errAddress.setVisibility(View.VISIBLE);
+            return true;
+        }
+
         if (txtBienSo.getText().toString().equals("")|| txtBienSo.getText().toString() == null){
             requestFocus(txtBienSo);
             errBienSo.setVisibility(View.VISIBLE);
@@ -278,6 +383,23 @@ public class EditOwnerActivity extends AppCompatActivity {
             errPrice.setVisibility(View.VISIBLE);
             return true;
         }
+
+        if (!Utilites.md5(txtOldPass.getText().toString()).equals(currentPass)){
+            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+            builder.setTitle("Thông báo")
+                    .setMessage("Bạn nhập chưa đúng mật khẩu hiện tại")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                            txtOldPass.setText("");
+                            requestFocus(txtOldPass);
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+            return true;
+        }
         return false;
     }
 
@@ -295,7 +417,11 @@ public class EditOwnerActivity extends AppCompatActivity {
         params.put("car_type", txtType.getText().toString());
         params.put("car_year", txtProduceYear.getText().toString());
         params.put("car_price", price);
-
+        params.put("address", txtAddress.getText().toString());
+        params.put("email", txtEmail.getText().toString());
+        params.put("lon", latLng.longitude);
+        params.put("lat", latLng.latitude);
+        params.put("pass", txtNewPass.getText().toString());
         Log.i("params deleteDelivery", params.toString());
         dialog = new ProgressDialog(this);
         dialog.setMessage("Đang tải dữ liệu");
@@ -320,6 +446,7 @@ public class EditOwnerActivity extends AppCompatActivity {
                     preference = new SharePreference(mContext);
                     preference.savePhone(txtTelephone.getText().toString());
                     preference.saveLicense(txtBienSo.getText().toString());
+                    preference.saveName(txtName.getText().toString());
                     saveVehicleInfor();
                     Intent intent = new Intent(mContext, ListPassengerActivity.class);
                     startActivity(intent);;
@@ -354,7 +481,11 @@ public class EditOwnerActivity extends AppCompatActivity {
             carObject.put("loaixe", txtType.getText().toString());
             carObject.put("namxe", txtProduceYear.getText().toString());
             carObject.put("gia", price);
-
+            carObject.put("pass", Utilites.md5(txtNewPass.getText().toString()));
+            carObject.put("email", txtEmail.getText().toString());
+            carObject.put("diachi", txtAddress.getText().toString());
+            carObject.put("lon", latLng.longitude);
+            carObject.put("lat", latLng.latitude);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -546,13 +677,15 @@ public class EditOwnerActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             String sPrice = mContext.getResources().getStringArray(R.array.price_array)[which];
-                            if (which == 0) {
+                            /*if (which == 0) {
                                 price = -1;
                                 txtPrice.setText(sPrice);
                             }else {
                                 price = Integer.valueOf(sPrice);
                                 txtPrice.setText(price+ " đ/km");
-                            }
+                            }*/
+                            price = Integer.valueOf(sPrice);
+                            txtPrice.setText(price+ " đ/km");
                             dialog.dismiss();
                         }
                     });
@@ -608,5 +741,20 @@ public class EditOwnerActivity extends AppCompatActivity {
             public void onRetry(int retryNo) {
             }
         });
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        mPlaceArrayAdapter.setGoogleApiClient(mGoogleApiClient);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 }

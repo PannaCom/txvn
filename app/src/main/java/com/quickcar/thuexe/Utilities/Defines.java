@@ -33,11 +33,13 @@ public class Defines {
     public static  final String     URL_GET_BOOKING_BY_PHONE    = HOSTNAME + "Api/getbookingbyphone";
     public static  final String     URL_LOG_DRIVER              = HOSTNAME + "Api/logDriver";
     public static  final String     URL_UPDATE_BOOKING          = HOSTNAME + "Api/updateBooking";
+    public static  final String     URL_BOOKING_FOR_CUSTOMER    = HOSTNAME + "Api/getBookingForCustomer";
 
+    public static  final String     URL_LOGIN                   = HOSTNAME + "Api/loginDriver";
     public static  final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 123;
     public static  final int REQUEST_CODE_LOCATION_PERMISSIONS = 234;
     public static  final int REQUEST_CODE_TELEPHONE_PERMISSIONS = 124;
-
+    public static  final int REQUEST_CODE_CALL_PERMISSIONS = 100;
 
     public static  final String     VEHICLE_PASS_ACTION         = "1";
     public static  final String     CAR_TYPE_FROM_ACTION        = "2";
@@ -57,9 +59,10 @@ public class Defines {
 
     public static String[] carModel = {};
     public static ArrayList<String> provinceFrom;
-
+    public static int TIME_BEFORE_AUCTION_SHORT                 = 1*60*60*1000 - 1000*60;
+    public static final String BUNDLER_DRIVER_PHONE                 = "driver phone";
     public static boolean startThread = false;
-
+    public static boolean isDriver = false;
     public static String[] Audi = {"Audi A3","Audi A4","Audi A5","Audi A6","Audi A7","Audi A8L 3.0","Audi A8L 4.0","Audi TT","Audi Q1","Audi Q3","Audi Q5","Audi Q7 2.0","Audi Q7 3.0"};
     public static String[] BMW = {"BMW 118i","BMW 218i Active Tourer","BMW 218i Gran Tourer","BMW M2","BMW 320i","BMW 330i","BMW 320i GT","BMW 328i GT","BMW M3","BMW 420i","BMW 420i Cabriolet","BMW 428i Grand Coupé","BMW M4 Coupé","BMW M4 Cabriolet","BMW 520i","BMW 528i","BMW 528i GT","BMW 535i","BMW 640i Grand Coupé","BMW 730Li","BMW 740Li","BMW 750Li","BMW X1 sDrive 18i","BMW X1 sDrive 20i","BMW X3 xDrive 20i","BMW X3 xDrive 28i","BMW X4 xDrive 28i","BMW X5 xDrive 30i","BMW X5 xDrive 35i","BMW X6 xDrive 35i","BMW X6 xDrive 30d","BMW Z4 sDrive 20i"};
     public static String[] Chevrolet = {"Aveo LT","Aveo LTZ","Spark Dou (van)","Spark Dou LS","Spark Dou LT","Orlando LTZ","Cruze LT","Cruze LTZ","Captiva LTZ","Colorado LT 4x2","Colorado LT 4x4","Colorado LTZ","Colorado Hight Country"};

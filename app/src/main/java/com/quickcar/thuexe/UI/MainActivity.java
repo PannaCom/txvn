@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 
 import com.quickcar.thuexe.R;
@@ -83,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             preference.saveRole(1);
-            Intent intent = new Intent(MainActivity.this, NewVehicleActivity.class);
+            Intent intent = new Intent(MainActivity.this, DriverLoginActivity.class);
             startActivity(intent);
             finish();
         }

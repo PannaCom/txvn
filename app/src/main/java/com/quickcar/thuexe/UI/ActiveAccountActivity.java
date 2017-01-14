@@ -1,21 +1,17 @@
 package com.quickcar.thuexe.UI;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,10 +24,6 @@ import com.quickcar.thuexe.Utilities.SharePreference;
 import com.quickcar.thuexe.Utilities.Utilites;
 
 import org.joda.time.DateTime;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class ActiveAccountActivity extends AppCompatActivity {
     private SharePreference preference;
@@ -64,7 +56,7 @@ public class ActiveAccountActivity extends AppCompatActivity {
         txtRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, NewVehicleActivity.class);
+                Intent intent = new Intent(mContext, RegisterDriverActivity.class);
                 preference.saveActive(false);
                 preference.clearLogin();
                 startActivity(intent);;

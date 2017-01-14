@@ -9,12 +9,14 @@
     <android.support.v4.widget.SwipeRefreshLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipe_view"
+        android:layout_marginBottom="100dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+
             android:id="@+id/vehicle_view"
             />
 
@@ -28,6 +30,49 @@
         android:visibility="gone"
         android:layout_gravity="center"
         android:id="@+id/txt_no_result" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:weightSum="1"
+        android:layout_gravity="bottom">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/click_residual_car"
+            android:gravity="center"
+            android:id="@+id/layout_new_residual_car">
 
+            <TextView
+                android:text="Đăng chuyến thừa khách"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_weight="1" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/click_new_car"
+            android:gravity="center"
+            android:id="@+id/layout_new_car_rental"
+            android:onClick="newDriverCar">
+
+            <TextView
+                android:text="Đăng chuyến tìm khách đi chung/chiều về"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView17"
+                android:gravity="center"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

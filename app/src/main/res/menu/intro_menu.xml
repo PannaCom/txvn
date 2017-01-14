@@ -11,4 +11,8 @@
         android:id="@+id/share_social"
         android:title="Mời người sử dụng"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/rental_vehice"
+        android:title="Xem chuyến đi chung/chiều về"
+        app:showAsAction="never" />
 </menu>

@@ -24,7 +24,6 @@
         <item>50 chỗ</item>
     </string-array>
     <string-array name="price_array" translatable="false">
-        <item>Thỏa thuận</item>
         <item>6000</item>
         <item>6500</item>
         <item>7000</item>
@@ -75,9 +74,13 @@
     <string name="splash_text">Đang load dữ liệu. Đảm bảo bạn đang kết nối mạng</string>
     <string name="fullname">Họ tên</string>
     <string name="phone">Số điện thoại</string>
+    <string name="email">Email</string>
     <string name="car_year">Năm sản xuất</string>
     <string name="price">Bảng giá (Đồng/Km)</string>
-
+    <string name="telephone">Số điện thoại</string>
+    <string name="password">Mật khẩu</string>
+    <string name="password_current">Mật khẩu cũ</string>
+    <string name="password_new">Mật khẩu mới</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

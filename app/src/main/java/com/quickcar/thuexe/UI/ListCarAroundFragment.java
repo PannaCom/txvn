@@ -167,7 +167,7 @@ public class ListCarAroundFragment  extends Fragment implements OnMapReadyCallba
     private class locate implements Runnable {
         public void run() {
             try {
-                while (true) {
+                while (Defines.isDriver) {
                     if (preference.getStatus() == 0) {
                         Log.e("TAG", "loop");
                         sendLocationToServer(preference.getStatus());

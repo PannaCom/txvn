@@ -20,6 +20,8 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +61,7 @@ public class ListPassengerBookingFragment extends Fragment {
     private ArrayList<BookingObject> passengers;
     private ProgressDialog dialog;
     private PassengerBookingAdapter adapter;
+    private LinearLayout layoutNewRental, layoutResidualCar;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -84,8 +87,23 @@ public class ListPassengerBookingFragment extends Fragment {
         vehicleView                 =   (RecyclerView)          getView().findViewById(R.id.vehicle_view);
         txtNoResult                 =   (TextView)              getView().findViewById(R.id.txt_no_result);
         swipeToRefresh              =   (SwipeRefreshLayout)    getView().findViewById(R.id.swipe_view);
-
-
+        layoutNewRental             =   (LinearLayout)          getView().findViewById(R.id.layout_new_car_rental);
+        layoutResidualCar           =   (LinearLayout)          getView().findViewById(R.id.layout_new_residual_car);
+        layoutNewRental.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentList = new Intent(getActivity(), NewCarRentalActivity.class);
+                startActivity(intentList);
+            }
+        });
+        layoutResidualCar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentList = new Intent(getActivity(), DriverBookingInfoActivity.class);
+                startActivity(intentList);
+                getActivity().finish();
+            }
+        });
         swipeToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

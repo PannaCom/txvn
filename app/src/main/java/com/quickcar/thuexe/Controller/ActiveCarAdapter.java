@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
@@ -25,6 +26,9 @@ import java.util.ArrayList;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.quickcar.thuexe.Models.CarInforObject;
 import com.quickcar.thuexe.R;
 import com.quickcar.thuexe.UI.ActiveAccountActivity;
@@ -40,10 +44,19 @@ public class ActiveCarAdapter extends RecyclerView.Adapter<ActiveCarAdapter.Vehi
     private ArrayList<CarInforObject> vehicles;
     private Context mContext;
     private onClickListener onClick;
-
+    private DisplayImageOptions options;
     public ActiveCarAdapter(Context mContext, ArrayList<CarInforObject> vehicles) {
         this.vehicles = vehicles;
         this.mContext = mContext;
+        options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.mipmap.loading)
+                .showImageForEmptyUri(R.mipmap.loading)
+                .showImageOnFail(R.mipmap.all)
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .considerExifParams(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
+                .build();
     }
 
     @Override
@@ -94,6 +107,7 @@ public class ActiveCarAdapter extends RecyclerView.Adapter<ActiveCarAdapter.Vehi
             holder.txtDistance.setText("cách "+df.format(vehicles.get(position).getDistance()*1000) + " m");
         else
             holder.txtDistance.setText("cách "+df.format(vehicles.get(position).getDistance()) + " km");
+        ImageLoader.getInstance().displayImage("http://thuexevn.com/"+vehicles.get(position).getImage(), holder.imgIcon, options, new SimpleImageLoadingListener());
     }
 
     private void sendContactToServer(String phone) {
@@ -148,6 +162,7 @@ public class ActiveCarAdapter extends RecyclerView.Adapter<ActiveCarAdapter.Vehi
         TextView  txtPhone;
         TextView  txtDistance;
         FrameLayout layoutCarName;
+        ImageView imgIcon;
         VehicleViewHolder(View itemView) {
             super(itemView);
             cardview        = (CardView)        itemView.findViewById(R.id.card_view);
@@ -160,6 +175,7 @@ public class ActiveCarAdapter extends RecyclerView.Adapter<ActiveCarAdapter.Vehi
             txtPhone        = (TextView)        itemView.findViewById(R.id.txt_phone);
             txtDistance     = (TextView)        itemView.findViewById(R.id.txt_distance);
             layoutCarName   = (FrameLayout)     itemView.findViewById(R.id.layout_car_name);
+            imgIcon         = (ImageView)       itemView.findViewById(R.id.img_icon);
         }
 
     }

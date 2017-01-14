@@ -17,6 +17,8 @@ import com.quickcar.thuexe.Models.CarInforObject;
 
 import org.joda.time.DateTime;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -76,6 +78,29 @@ public class Utilites {
         }
         return temp;
     }
+    public static final String md5(final String s) {
+        final String MD5 = "MD5";
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest.getInstance(MD5);
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (byte aMessageDigest : messageDigest) {
+                String h = Integer.toHexString(0xFF & aMessageDigest);
+                while (h.length() < 2)
+                    h = "0" + h;
+                hexString.append(h);
+            }
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
     public static ArrayList<BusInfor> sortIncrease(ArrayList<BusInfor> infor){
         boolean swapped = true;
         int j = 0;
@@ -97,6 +122,7 @@ public class Utilites {
         }
         return temp;
     }
+
     public static boolean checkFilterNull(){
         if (Defines.FilterInfor.getName() != null)
             return false;
@@ -178,6 +204,22 @@ public class Utilites {
             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
     public static String convertTime(DateTime current){
         String dateFrom = current.getDayOfMonth()+"/"+current.getMonthOfYear()+"/"+current.getYear();
+        dateFrom+=" ";
+
+        if (current.getHourOfDay()>=10)
+            dateFrom+=current.getHourOfDay();
+        else
+            dateFrom+="0"+current.getHourOfDay();
+        dateFrom+=":";
+        if (current.getMinuteOfHour()>=10)
+            dateFrom+=current.getMinuteOfHour();
+        else
+            dateFrom+="0"+current.getMinuteOfHour();
+
+        return dateFrom;
+    }
+    public static String convertTimeShort(DateTime current){
+        String dateFrom = current.getDayOfMonth()+"/"+current.getMonthOfYear();
         dateFrom+=" ";
 
         if (current.getHourOfDay()>=10)

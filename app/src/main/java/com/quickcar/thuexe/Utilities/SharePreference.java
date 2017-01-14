@@ -24,6 +24,7 @@ public class SharePreference {
     private String ROLE = "role";
     private String TOKEN = "token";
     private String DATEACTIVE = "date active";
+    private String TEMP_PHONE   = "temp phone";
     // constructor
     public SharePreference(Context activity) {
         this.activity = activity;
@@ -203,5 +204,14 @@ public class SharePreference {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
         return sp.getString(DATEACTIVE,"");
     }
-
+    public void saveTempPhone(String phone) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(TEMP_PHONE, phone);
+        editor.apply();
+    }
+    public String getTempPhone() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(activity);
+        return sp.getString(TEMP_PHONE, "");
+    }
 }

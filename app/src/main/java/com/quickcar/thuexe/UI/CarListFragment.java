@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -38,6 +39,11 @@ import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.quickcar.thuexe.Controller.ActiveCarAdapter;
 import com.quickcar.thuexe.Controller.CarTypesAdapter;
 import com.quickcar.thuexe.Models.CarInforObject;
@@ -71,6 +77,7 @@ public class CarListFragment extends Fragment {
     private ActiveCarAdapter adapter;
     private ProgressDialog dialog;
     private SwipeRefreshLayout swipeToRefresh;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -93,10 +100,26 @@ public class CarListFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mContext = getActivity();
         //moveDrawerToTop();
+        initImageLoader(getActivity());
         initComponents();
 
     }
+    public static void initImageLoader(Context context) {
+        // This configuration tuning is custom. You can tune every option, you may tune some of them,
+        // or you can create default configuration by
+        //  ImageLoaderConfiguration.createDefault(this);
+        // method.
+        ImageLoaderConfiguration.Builder config = new ImageLoaderConfiguration.Builder(context);
+        config.threadPriority(Thread.NORM_PRIORITY - 2);
+        config.denyCacheImageMultipleSizesInMemory();
+        config.diskCacheFileNameGenerator(new Md5FileNameGenerator());
+        config.diskCacheSize(50 * 1024 * 1024); // 50 MiB
+        config.tasksProcessingOrder(QueueProcessingType.LIFO);
+        config.writeDebugLogs(); // Remove for release app
 
+        // Initialize ImageLoader with configuration.
+        ImageLoader.getInstance().init(config.build());
+    }
     private void initComponents() {
         vehicleView                 =   (RecyclerView)          getView().findViewById(R.id.vehicle_view);
         txtNoResult                 =   (TextView)              getView().findViewById(R.id.txt_no_result);
@@ -258,9 +281,10 @@ public class CarListFragment extends Fragment {
             String carSize      = jsonobject.getString("car_size");
             String carType      = jsonobject.getString("car_type");
             String carMade      = jsonobject.getString("car_made");
+            String image        = jsonobject.getString("image");
             double distance     = jsonobject.getDouble("D");
             String price        = jsonobject.getString("car_price");
-            CarInforObject busInfor = new CarInforObject(name,phone,carModel,carMade,carType,carSize,distance,price);
+            CarInforObject busInfor = new CarInforObject(name,phone,carModel,carMade,carType,carSize,image,distance,price);
             vehicles.add(busInfor);
         } catch (JSONException e) {
             e.printStackTrace();

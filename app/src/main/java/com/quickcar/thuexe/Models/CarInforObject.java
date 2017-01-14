@@ -11,12 +11,13 @@ public class CarInforObject {
     private String carMade;
     private String carType;
     private String carSize;
+    private String image;
     private double distance;
     private String price;
     public CarInforObject() {
     }
 
-    public CarInforObject(String name, String phone, String carModel, String carMade, String carType, String carSize, double distance, String price) {
+    public CarInforObject(String name, String phone, String carModel, String carMade, String carType, String carSize,String image, double distance, String price) {
         this.name = name;
         this.phone = phone;
         this.carModel = carModel;
@@ -25,6 +26,15 @@ public class CarInforObject {
         this.carSize = carSize;
         this.distance = distance;
         this.price = price;
+        this.image = image;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getName() {

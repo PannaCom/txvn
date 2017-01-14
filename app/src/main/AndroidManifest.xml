@@ -26,7 +26,7 @@
         <activity android:name=".UI.ListVehicleActivity" />
         <activity android:name=".UI.MainActivity" />
         <activity android:name=".UI.ListPassengerActivity" />
-        <activity android:name=".UI.NewVehicleActivity" />
+        <activity android:name=".UI.RegisterDriverActivity" />
         <activity android:name=".UI.EditOwnerActivity" />
 
         <service android:name=".Fcm.FirebaseMessagingService">
@@ -48,7 +48,11 @@
         <activity android:name=".UI.SelectPassengerActionActivity" />
         <activity android:name=".UI.BookingNowActivity" />
         <activity android:name=".UI.GetInforPassengerActivity" />
-        <activity android:name=".UI.ListPassengerHireActivity"></activity>
+        <activity android:name=".UI.ListPassengerHireActivity" />
+        <activity android:name=".UI.NewCarRentalActivity" />
+        <activity android:name=".UI.PassengerListRentalActivity" />
+        <activity android:name=".UI.DriverLoginActivity" />
+        <activity android:name=".UI.DriverBookingInfoActivity"></activity>
     </application>
 
 </manifest>

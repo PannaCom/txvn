@@ -20,12 +20,20 @@
             android:background="@mipmap/bg_vehicle">
 
 
+
             <FrameLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:id="@+id/layout_car_name"
                 android:background="@mipmap/name_1">
-
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:id="@+id/img_icon"
+                    android:src="@mipmap/btn_delete"/>
                 <TextView
                     android:text="Audi A3"
                     android:layout_width="wrap_content"
@@ -35,7 +43,10 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:id="@+id/txt_car_name" />
+
+                </LinearLayout>
             </FrameLayout>
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

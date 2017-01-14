@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
+import android.view.KeyEvent;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +24,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.quickcar.thuexe.Controller.PlaceArrayAdapter;
 import com.quickcar.thuexe.R;
+import com.quickcar.thuexe.Utilities.SharePreference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,11 +45,13 @@ public class BookingNowActivity extends AppCompatActivity implements GoogleApiCl
             R.mipmap.form,
             R.mipmap.maps
     };
+    private SharePreference preference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_now);
         mContext = this;
+        preference = new SharePreference(this);
         initComponents();
     }
 
@@ -76,30 +80,39 @@ public class BookingNowActivity extends AppCompatActivity implements GoogleApiCl
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                if (preference.getRole() == 1){
+                    Intent intent = new Intent(mContext, ListPassengerActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else
+                    finish();
             }
         });
-        btnList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(mContext, v);
-                MenuInflater inflater = popup.getMenuInflater();
-                inflater.inflate(R.menu.passenger_menu, popup.getMenu());
-                popup.show();
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()){
-                            case R.id.list_hire:
-                                Intent intent = new Intent(mContext, ListPassengerHireActivity.class);
-                                startActivity(intent);
-                                return true;
+        if (preference.getRole() == 1){
+            btnList.setVisibility(View.GONE);
+        }else {
+            btnList.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PopupMenu popup = new PopupMenu(mContext, v);
+                    MenuInflater inflater = popup.getMenuInflater();
+                    inflater.inflate(R.menu.passenger_menu, popup.getMenu());
+                    popup.show();
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.list_hire:
+                                    Intent intent = new Intent(mContext, ListPassengerHireActivity.class);
+                                    startActivity(intent);
+                                    return true;
+                            }
+                            return false;
                         }
-                        return false;
-                    }
-                });
-            }
-        });
+                    });
+                }
+            });
+        }
     }
 
     private void setupTabIcons() {
@@ -154,7 +167,12 @@ public class BookingNowActivity extends AppCompatActivity implements GoogleApiCl
 
     @Override
     public void onResult(String result) {
-        finish();
+        if (preference.getRole() == 1){
+            Intent intent = new Intent(mContext, ListPassengerActivity.class);
+            startActivity(intent);
+            finish();
+        }else
+            finish();
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -185,7 +203,18 @@ public class BookingNowActivity extends AppCompatActivity implements GoogleApiCl
             return mFragmentTitleList.get(position);
         }
     }
-
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (preference.getRole() == 1) {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                Intent intent = new Intent(mContext, ListPassengerActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
     public interface OnConnected {
         public void onConnected(GoogleApiClient googleApi, PlaceArrayAdapter placeFrom, PlaceArrayAdapter placeTo);
     }

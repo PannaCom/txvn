@@ -142,6 +142,9 @@ public class ListVehicleActivity extends AppCompatActivity {
                             case R.id.share_social:
                                 showDialogShareSocial();
                                 return true;
+                            case R.id.rental_vehice:
+                                Intent intent = new Intent(mContext, PassengerListRentalActivity.class);
+                                startActivity(intent);
                         }
                         return false;
                     }

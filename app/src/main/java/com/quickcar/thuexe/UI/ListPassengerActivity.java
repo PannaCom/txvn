@@ -87,6 +87,9 @@ public class ListPassengerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_list_passenger);
         preference = new SharePreference(this);
         mContext = this;
+        initComponents();
+    }
+    private void initComponents(){
         imgMenu     = (ImageView)   findViewById(R.id.img_menu);
         btnBack     =  (ImageView)  findViewById(R.id.img_back);
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +131,9 @@ public class ListPassengerActivity extends AppCompatActivity {
                             case R.id.share_social:
                                 showDialogShareSocial();
                                 return true;
+                            case R.id.change_role:
+                                showDialogSwitchUser();
+                                return true;
                         }
                         return false;
                     }
@@ -148,6 +154,34 @@ public class ListPassengerActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
+    }
+
+    private void showDialogSwitchUser() {
+        android.app.AlertDialog dialog = new android.app.AlertDialog.Builder(this)
+                .setTitle("Thông báo")
+                .setMessage("Bạn có muốn chọn lại vai trò của mình?")
+                .setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Defines.isDriver = false;
+                        preference.savePhone("");
+                        preference.saveName("");
+                        preference.saveLicense("");
+                        preference.clearLogin();
+                        preference.saveRole(0);
+                        preference.saveActive(false);
+                        Intent intentChange = new Intent(ListPassengerActivity.this, MainActivity.class);
+                        startActivity(intentChange);
+                        finish();
+                    }
+                })
+                .setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setCancelable(false)
+                .show();
     }
     private void setupTabIcons() {
         tabLayout.getTabAt(0).setIcon(tabIcons[0]);

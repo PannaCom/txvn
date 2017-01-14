@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.quickcar.thuexe.R;
+import com.quickcar.thuexe.Utilities.Defines;
 import com.quickcar.thuexe.Utilities.SharePreference;
 import com.quickcar.thuexe.Utilities.Utilites;
 
@@ -79,6 +80,7 @@ public class SplashActivity extends AppCompatActivity {
                 public void run() {
                     if (preference.getLogin()) {
                         if (preference.getActive()) {
+                            Defines.isDriver = true;
                             Intent intent = new Intent(SplashActivity.this, ListPassengerActivity.class);
                             startActivity(intent);
                             finish();
@@ -98,7 +100,7 @@ public class SplashActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
                         } else {
-                            Intent intent = new Intent(SplashActivity.this, NewVehicleActivity.class);
+                            Intent intent = new Intent(SplashActivity.this, DriverLoginActivity.class);
                             startActivity(intent);
                             finish();
                         }

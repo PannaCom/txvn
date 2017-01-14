@@ -25,4 +25,6 @@
     <color name="title">#029ca0</color>
     <color name="yellow_1">#fdd207</color>
     <color name="red_1">#e05c4b</color>
+    <color name="green_500">#00aab7</color>
+    <color name="green_300">#69c9d2</color>
 </resources>
