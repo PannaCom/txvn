@@ -202,7 +202,7 @@ public class ListPassengerBookingFragment extends Fragment {
                         adapter = new PassengerBookingAdapter(getActivity(), passengers);
                         vehicleView.setAdapter(adapter);
                         txtNoResult.setVisibility(View.VISIBLE);
-                        txtNoResult.setText("Không có khách nào gọi xe");
+                        txtNoResult.setText("Bạn nên bật ứng dụng thường xuyên để đón khách gần đây");
                         //swipeToRefresh.setRefreshing(false);
                     }
                     dialog.dismiss();

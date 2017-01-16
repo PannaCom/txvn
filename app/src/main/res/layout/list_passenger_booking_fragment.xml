@@ -26,8 +26,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Rất tiếc , không có xe nào thỏa mãn"
-        android:textSize="18sp"
+        android:textSize="15sp"
         android:visibility="gone"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:gravity="center"
         android:layout_gravity="center"
         android:id="@+id/txt_no_result" />
     <LinearLayout

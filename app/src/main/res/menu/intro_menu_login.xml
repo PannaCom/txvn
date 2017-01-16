@@ -10,6 +10,6 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/change_role"
-        android:title="Chuyển vai trò"
+        android:title="Chuyển người dùng"
         app:showAsAction="never" />
 </menu>
