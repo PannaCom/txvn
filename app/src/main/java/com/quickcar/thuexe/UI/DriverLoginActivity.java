@@ -186,10 +186,16 @@ public class DriverLoginActivity extends AppCompatActivity {
                     dialog.dismiss();
                     return;
                 }
-                Toast.makeText(mContext, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
+
                 try {
                     JSONArray data = new JSONArray(new String(responseBody));
+                    if (data.length() == 0){
+                        Toast.makeText(mContext, "Đăng nhập thất bại", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                        return;
+                    }
+                    Toast.makeText(mContext, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
                     Defines.isDriver = true;
                     for (int i = 0; i < data.length(); i++) {
                         JSONObject jsonobject = data.getJSONObject(i);
